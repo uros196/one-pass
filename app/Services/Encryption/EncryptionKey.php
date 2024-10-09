@@ -32,7 +32,7 @@ class EncryptionKey
         $plain_text_key = sprintf(
             '%s|%s|%s',
             config('app.key'),
-            hash('crc32b', MasterKey::get()),
+            MasterKey::get(),
             $user->encryptionKey->key
         );
 

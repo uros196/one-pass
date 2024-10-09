@@ -2,6 +2,8 @@
 
 namespace App\Services\Encryption;
 
+use App\Models\User;
+
 /**
  * Master key is that only a user knows.
  * We are using this key to unlock Encryption Key that is used for encryption-sensitive data.
@@ -14,6 +16,22 @@ class MasterKey
      * @var string|null $master_key
      */
     protected static ?string $master_key = null;
+
+    /**
+     * Make the hashed master key.
+     *
+     * @param string $master_key
+     * @param User $user
+     *
+     * @return string
+     */
+    public static function make(string $master_key, User $user): string
+    {
+        $key = hash('sha256', "{$master_key}.". hash('crc32b', $user->id));
+        self::set($master_key);
+
+        return $key;
+    }
 
     /**
      * Set the master key.
