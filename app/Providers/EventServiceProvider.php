@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\CreateEncryptionKeyListener;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
@@ -19,6 +20,7 @@ class EventServiceProvider extends ServiceProvider
     protected array $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+            CreateEncryptionKeyListener::class
         ],
         // handle account verification
         Verified::class => [
