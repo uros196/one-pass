@@ -3,12 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -59,15 +57,4 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(EncryptionKey::class);
     }
 
-    /**
-     * Automatically hash password.
-     *
-     * @return Attribute
-     */
-    public function password(): Attribute
-    {
-        return Attribute::set(function ($value) {
-            return Hash::make($value);
-        });
-    }
 }

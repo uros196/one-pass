@@ -23,6 +23,28 @@ class Encrypter
     }
 
     /**
+     * Encrypt sensitive data using a key specific by user.
+     *
+     * @param mixed $data
+     * @return string
+     */
+    public function encrypt(#[\SensitiveParameter] mixed $data): string
+    {
+        return $this->getEncrypter()->encrypt($data);
+    }
+
+    /**
+     * Decrypt data using a key specific by user.
+     *
+     * @param string $data
+     * @return mixed
+     */
+    public function decrypt(string $data): mixed
+    {
+        return $this->getEncrypter()->decrypt($data);
+    }
+
+    /**
      * Get encrypter with a custom encryption key that is unique by user.
      *
      * @return BaseEncrypter
