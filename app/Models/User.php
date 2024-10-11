@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasEncryptionToken;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, HasEncryptionToken;
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'is_blocked',
     ];
 
     /**
@@ -54,7 +57,41 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function encryptionKey(): HasOne
     {
-        return $this->hasOne(EncryptionKey::class);
+        return $this->hasOne(EncryptionKey::class)
+            ->where('session_id', session()->id());
     }
 
+    /**
+     * Append 'is_blocked => true' condition.
+     *
+     * @param Builder $builder
+     * @return void
+     */
+    public function scopeBlocked(Builder $builder): void
+    {
+        $builder->where('is_blocked', true);
+    }
+
+    /**
+     * Check if the account is blocked.
+     *
+     * @param Builder $builder
+     * @param string $email
+     *
+     * @return bool
+     */
+    public function scopeAccountBlocked(Builder $builder, string $email): bool
+    {
+        return $builder->where('email', $email)->first()?->is_blocked ?? false;
+    }
+
+    /**
+     * Mark the account as blocked.
+     *
+     * @return bool
+     */
+    public function markAsBlocked(): bool
+    {
+        return $this->forceFill(['is_blocked' => true])->save();
+    }
 }

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Services\Encryption\EncryptionKey;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -40,5 +42,20 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    /**
+     * Make required related data.
+     *
+     * @return self
+     */
+    public function configure(): self
+    {
+        return $this->afterCreating(function (User $user) {
+            // make a unique part of the encryption key
+            $user->encryptionKey()->create([
+                'key' => EncryptionKey::makeFor($user)
+            ]);
+        });
     }
 }

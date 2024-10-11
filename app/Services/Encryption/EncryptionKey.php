@@ -21,7 +21,7 @@ class EncryptionKey
     }
 
     /**
-     * Get the finale encryption key (unique by user) for encryption/decryption sensitive data.
+     * Get the final encryption key (unique by user) for encryption/decryption sensitive data.
      *
      * @param User $user
      * @return string

@@ -16,7 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        //
+        $middleware->alias([
+            'encrypted' => \App\Http\Middleware\VerifyEncryptionTokenMiddleware::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

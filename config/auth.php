@@ -112,6 +112,14 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    // maximum number of attempts for password confirmation
+    'password_confirmation_attempts' => 3,
+
+    'encryption_token' => [
+        // token life after last using expressed in minutes
+        'expire' => 3
+    ],
+
     'verification' => [
         // limit email verification to 5 min
         'expire' => 5

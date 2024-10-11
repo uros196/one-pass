@@ -32,7 +32,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         // handle exceeded maximum login attempts
         Lockout::class => [
-
+            // TODO: inform the user via mail that his account has been blocked
         ]
     ];
 

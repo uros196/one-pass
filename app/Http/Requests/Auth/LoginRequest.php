@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ class LoginRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
+     * @return array
      */
     public function rules(): array
     {
@@ -35,18 +36,21 @@ class LoginRequest extends FormRequest
     /**
      * Attempt to authenticate the request's credentials.
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function authenticate(): void
     {
-        $this->ensureIsNotRateLimited();
+        if (User::accountBlocked($this->get('email'))) {
+            $this->failed(__('auth.blocked'));
+        }
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+
+            // increase a failed login attempt
             RateLimiter::hit($this->throttleKey());
+            $this->failedAttempt();
 
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
+            $this->failed(__('auth.failed'));
         }
 
         RateLimiter::clear($this->throttleKey());
@@ -55,24 +59,35 @@ class LoginRequest extends FormRequest
     /**
      * Ensure the login request is not rate limited.
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
-    public function ensureIsNotRateLimited(): void
+    public function failedAttempt(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        $attempt = config('auth.password_confirmation_attempts') - 1;
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), $attempt)) {
             return;
         }
 
-        event(new Lockout($this));
+        // market user's account as blocked
+        $is_blocked = User::where('email', $this->get('email'))->first()?->markAsBlocked();
 
-        $seconds = RateLimiter::availableIn($this->throttleKey());
+        if ($is_blocked) {
+            event(new Lockout($this));
 
-        throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
-        ]);
+            $this->failed(__('auth.blocked'));
+        }
+        // this is a case if email does not exist in our system
+        else {
+            $seconds = RateLimiter::availableIn($this->throttleKey());
+
+            $this->failed(
+                trans('auth.throttle', [
+                    'seconds' => $seconds,
+                    'minutes' => ceil($seconds / 60),
+                ]),
+            );
+        }
+
     }
 
     /**
@@ -80,6 +95,21 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('email')) .'|'. $this->ip());
+    }
+
+    /**
+     * Inform about failed validation.
+     *
+     * @param string $message
+     * @return void
+     *
+     * @throws ValidationException
+     */
+    protected function failed(string $message): void
+    {
+        throw ValidationException::withMessages([
+            'email' => $message,
+        ]);
     }
 }
