@@ -106,9 +106,9 @@ trait HasSensitiveData
      * @param mixed $data
      * @return string
      */
-    public function encrypt(#[\SensitiveParameter] mixed $data): string
+    protected function encrypt(#[\SensitiveParameter] mixed $data): string
     {
-        return app(Encrypter::class)->encrypt($data);
+        return $this->getEncrypter()->encrypt($data);
     }
 
     /**
@@ -118,10 +118,20 @@ trait HasSensitiveData
      * @param string $data
      * @return mixed
      */
-    public function decrypt(string $data): mixed
+    protected function decrypt(string $data): mixed
     {
         return MasterKey::exists()
-            ? app(Encrypter::class)->decrypt($data)
+            ? $this->getEncrypter()->decrypt($data)
             : '••••••••••••';
+    }
+
+    /**
+     * Get 'Encrypter' instance.
+     *
+     * @return Encrypter
+     */
+    protected function getEncrypter(): Encrypter
+    {
+        return app(Encrypter::class);
     }
 }

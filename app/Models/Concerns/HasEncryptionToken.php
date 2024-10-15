@@ -12,13 +12,14 @@ use Illuminate\Support\Str;
 trait HasEncryptionToken
 {
     /**
-     * Get the related encryption token.
+     * Get the related encryption token (based on the current session).
      *
      * @return HasOne
      */
     public function encryptionToken(): HasOne
     {
-        return $this->hasOne(EncryptionToken::class);
+        return $this->hasOne(EncryptionToken::class)
+            ->where('session_id', session()->id());
     }
 
     /**
@@ -40,7 +41,7 @@ trait HasEncryptionToken
             'encryption_token' => $token
         ]);
 
-        $this->encryptionToken->create([
+        $this->encryptionToken()->create([
             'token' => TokenFactory::create($token),
             'master_key' => app(MasterKey::class, ['request' => $request])->encrypt(),
             'session_id' => session()->id(),
@@ -59,13 +60,11 @@ trait HasEncryptionToken
      */
     public function generateTokenString(): string
     {
-        $plain_token = sprintf(
-            '%s|%s|%s',
+        return sprintf(
+            '%s-%s-%s',
             session()->id(),
             Str::random(40),
             hash('crc32b', $this->email)
         );
-
-        return Str::substr(hash('sha512', $plain_token), rand(0, 96), 32);
     }
 }

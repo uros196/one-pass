@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Requests\Encryption\MasterKeyRequest;
 use App\Services\Encryption\MasterKey;
 use Closure;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class VerifyEncryptionTokenMiddleware
@@ -14,10 +14,10 @@ class VerifyEncryptionTokenMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(MasterKeyRequest $request, Closure $next): Response
+    public function handle(Request $request, Closure $next): Response
     {
-        // MasterKeyRequest will verify token validity
-        app(MasterKey::class, ['request' => $request])->decrypt();
+        // 'MasterKeyRequest' will verify token validity
+        app(MasterKey::class)->decrypt();
 
         return $next($request);
     }

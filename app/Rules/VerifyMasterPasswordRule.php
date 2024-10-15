@@ -36,10 +36,11 @@ class VerifyMasterPasswordRule implements ValidationRule
             RateLimiter::hit($this->throttleKey());
             $this->failedAttempt($fail);
 
-            $fail('encryption.master_key.failed');
+            $fail(__('encryption.master_key.failed'));
         }
-
-        RateLimiter::clear($this->throttleKey());
+        else {
+            RateLimiter::clear($this->throttleKey());
+        }
     }
 
     /**
@@ -48,9 +49,9 @@ class VerifyMasterPasswordRule implements ValidationRule
      * @param Closure $fail
      * @return void
      */
-    public function failedAttempt(Closure $fail): void
+    protected function failedAttempt(Closure $fail): void
     {
-        $attempt = config('auth.password_confirmation_attempts') - 1;
+        $attempt = config('auth.password_confirmation_attempts');
         if (!RateLimiter::tooManyAttempts($this->throttleKey(), $attempt)) {
             return;
         }
@@ -63,11 +64,13 @@ class VerifyMasterPasswordRule implements ValidationRule
         // after an account has been blocked, automatically log out the user
         Auth::logout();
 
-        $fail('auth.blocked');
+        $fail(__('auth.blocked'));
     }
 
     /**
      * Get the rate limiting throttle key for the request.
+     *
+     * @return string
      */
     protected function throttleKey(): string
     {

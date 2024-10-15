@@ -63,7 +63,7 @@ class LoginRequest extends FormRequest
      */
     public function failedAttempt(): void
     {
-        $attempt = config('auth.password_confirmation_attempts') - 1;
+        $attempt = config('auth.password_confirmation_attempts');
         if (!RateLimiter::tooManyAttempts($this->throttleKey(), $attempt)) {
             return;
         }

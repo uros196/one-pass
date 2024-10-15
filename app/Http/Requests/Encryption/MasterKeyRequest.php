@@ -4,6 +4,7 @@ namespace App\Http\Requests\Encryption;
 
 use App\Rules\VerifyEncryptionTokenRule;
 use App\Rules\VerifyMasterPasswordRule;
+use App\Rules\VerifyUserRequestRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -47,6 +48,7 @@ class MasterKeyRequest extends FormRequest
                 // if 'password' is present in the request
                 'exclude_with:password',
                 'required',
+                new VerifyUserRequestRule($this),
                 new VerifyEncryptionTokenRule($this)
             ]
         ];

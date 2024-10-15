@@ -20,7 +20,7 @@ trait JsonResponsable
     {
         $response = [
             'success' => true,
-            'message' => $message ?? __('api.success.msg'),
+            'message' => $message ?? __('Success'),
             'data'    => $result,
         ];
 
@@ -43,7 +43,7 @@ trait JsonResponsable
     {
         $response = [
             'success' => false,
-            'message' => $error ?? __('api.error'),
+            'message' => $error ?? __('Error!'),
         ];
 
         if (!empty($errorMessages)) {

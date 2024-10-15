@@ -6,6 +6,7 @@ use App\Models\Concerns\HasEncryptionToken;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -57,8 +58,28 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function encryptionKey(): HasOne
     {
-        return $this->hasOne(EncryptionKey::class)
-            ->where('session_id', session()->id());
+        return $this->hasOne(EncryptionKey::class);
+    }
+
+    /**
+     * Get the current session relation.
+     *
+     * @return HasOne
+     */
+    public function session(): HasOne
+    {
+        return $this->hasOne(Session::class)
+            ->where('id', session()->id());
+    }
+
+    /**
+     * Get the all related session.
+     *
+     * @return HasMany
+     */
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(Session::class)->ordered();
     }
 
     /**

@@ -21,6 +21,18 @@ class EncryptionToken extends Model
         'expires_at',
     ];
 
+/**
+    * Get the attributes that should be cast.
+    *
+    * @return array<string, string>
+    */
+    protected function casts(): array
+    {
+        return [
+            'last_used_at' => 'datetime',
+            'expires_at' => 'datetime',
+        ];
+    }
     /**
      * Get related User.
      *

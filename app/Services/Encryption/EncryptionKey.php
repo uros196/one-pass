@@ -15,7 +15,10 @@ class EncryptionKey
      */
     public static function makeFor(User $user): string
     {
-        $string = "{$user->id}|{$user->email}|". now()->timestamp .'|'. Str::random(32);
+        $string = sprintf(
+            '%s|%s|%d|%s',
+            $user->id, $user->email, now()->timestamp, Str::random(32)
+        );
 
         return Str::substr(hash('sha512', $string), rand(0, 64), 64);
     }

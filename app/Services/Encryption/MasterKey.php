@@ -4,6 +4,7 @@ namespace App\Services\Encryption;
 
 use App\Http\Requests\Encryption\MasterKeyRequest;
 use App\Models\User;
+use App\Services\Encryption\Token\TokenFactory;
 
 /**
  * 'Master Password' is a thing that only a user knows.
@@ -112,13 +113,19 @@ class MasterKey
     }
 
     /**
-     * Get the encryption token, a key for encrypting/decrypting 'Master Key'.
+     * Get the 'Encryption Key', a key for encrypting/decrypting a 'Master Key'.
      *
      * @return string|null
      */
-    protected function getEncryptionToken(): string|null
+    protected function getEncryptionKey(): string|null
     {
-        return $this->request->validated('encryption_token');
+        // we 'salt' the token in case it becomes exposed,
+        // so it cannot be used outside the environment where is it created
+        return TokenFactory::salt(
+            // TODO: consider how to resolve this problem, we're modifying request object while creating an encryption token
+            // $this->request->validated('encryption_token')
+            $this->request->encryption_token
+        );
     }
 
     /**
@@ -128,6 +135,6 @@ class MasterKey
      */
     protected function encrypter(): Encrypter
     {
-        return app(Encrypter::class)->usingKey($this->getEncryptionToken());
+        return app(Encrypter::class)->usingKey($this->getEncryptionKey());
     }
 }
