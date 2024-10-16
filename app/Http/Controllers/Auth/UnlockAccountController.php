@@ -36,8 +36,10 @@ class UnlockAccountController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        $request->session()->put('auth.password_confirmed_at', time());
+
         $request->user()->unlockAccount();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->route('dashboard');
     }
 }

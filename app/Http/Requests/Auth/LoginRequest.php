@@ -72,9 +72,19 @@ class LoginRequest extends FormRequest
             // if the account is already lock, do not take any action
             !$this->isAccountLocked()
             // market user's account as locked
-            && User::where('email', $this->get('email'))->first()?->markAsLocked()
+            && User::where('email', $this->validated('email'))->first()?->markAsLocked()
         ) {
             event(new Lockout($this));
+
+            // remove rate limiter when an account is locked
+            // if the user reacts immediately, he can confirm the password without waiting
+            RateLimiter::clear($this->throttleKey());
+
+            // because we use this request in many scenarios, log out the user just in case
+            Auth::logout();
+
+            // this message will be displayed on the login page
+            $this->session()->put('status', __('auth.locked'));
 
             $this->failed(__('auth.locked'));
         }
@@ -107,7 +117,7 @@ class LoginRequest extends FormRequest
      */
     protected function isAccountLocked(): bool
     {
-        return User::isAccountLocked($this->get('email'));
+        return User::isAccountLocked($this->validated('email'));
     }
 
     /**

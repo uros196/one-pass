@@ -24,9 +24,13 @@ export default function UnlockAccount({hash}: {hash: string}) {
         <GuestLayout>
             <Head title="Unlock your account"/>
 
+            <div className="mb-4 text-sm text-gray-600">
+                Confirm the password in order to unlock your account.
+            </div>
+
             <form onSubmit={submit}>
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Confirm the password to unlock your account"/>
+                    <InputLabel htmlFor="password" value="Password"/>
 
                     <TextInput
                         id="password"
@@ -34,7 +38,6 @@ export default function UnlockAccount({hash}: {hash: string}) {
                         name="password"
                         value={data.password}
                         className="mt-1 block w-full"
-                        placeholder="Password"
                         onChange={(e) => setData('password', e.target.value)}
                     />
 

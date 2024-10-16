@@ -39,19 +39,6 @@ Route::middleware('auth')->group(function () {
         Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
         Route::put('password', [PasswordController::class, 'update'])->name('password.update');
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-
-
-        // TEST METHODS (delete them after tests ends)
-        Route::controller(\App\Http\Controllers\TestController::class)->group(function () {
-            Route::get('/create-encrypt-token', 'encryptTokenForm')->name('show-encrypt-token-form');
-            Route::post('/create-encrypt-token', 'createEncryptToken')->name('create-token');
-
-            Route::get('/encrypt/{token?}', 'showEncrypt')->name('show-encrypt');
-            Route::post('/encrypt', 'encryptData')->middleware('encrypted')->name('encrypt');
-            Route::get('/decrypt/{token?}/{encrypted?}', 'showDecrypt')->name('show-decrypt');
-            // remove 'encrypted' middleware if you want to see how non-decrypted data will be displayed
-            Route::post('/decrypt', 'decryptData')->middleware('encrypted')->name('decrypt');
-        });
     });
 
 });

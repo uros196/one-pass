@@ -61,8 +61,15 @@ class VerifyMasterPasswordRule implements ValidationRule
 
         event(new Lockout($this->request));
 
+        // remove rate limiter when an account is locked
+        // if the user reacts immediately, he can enter the password without waiting
+        RateLimiter::clear($this->throttleKey());
+
         // after an account has been locked, automatically log out the user
         Auth::logout();
+
+        // this message will be displayed on the login page
+        $this->request->session()->put('status', __('auth.locked'));
 
         $fail(__('auth.locked'));
     }
