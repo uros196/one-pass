@@ -6,6 +6,9 @@ use App\Services\Encryption\Encrypter;
 use App\Services\Encryption\MasterKey;
 
 /**
+ * This trait is supposed to use on Models.
+ * Instead of this, use 'Encryptable' caster for cast sensitive fields.
+ *
  * @property array $sensitive_data
  */
 trait HasSensitiveData
@@ -55,6 +58,8 @@ trait HasSensitiveData
         }
 
         $value = $this->encrypt($value);
+
+        $this->attribute[$key] = $value;
 
         // first, we will check for the presence of a mutator for the set operation
         // which simply lets the developers tweak the attribute as it is set on
