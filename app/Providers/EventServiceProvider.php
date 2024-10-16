@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\AccountLockedListener;
 use App\Listeners\CreateEncryptionKeyListener;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Auth\Events\PasswordReset;
@@ -18,6 +19,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected array $listen = [
+        // handle user registration
         Registered::class => [
             SendEmailVerificationNotification::class,
             CreateEncryptionKeyListener::class
@@ -28,11 +30,11 @@ class EventServiceProvider extends ServiceProvider
         ],
         // handle password reset
         PasswordReset::class => [
-
+            // TODO: start the process of making a new key and re-encrypting user's data
         ],
         // handle exceeded maximum login attempts
         Lockout::class => [
-            // TODO: inform the user via mail that his account has been blocked
+            AccountLockedListener::class
         ]
     ];
 

@@ -115,6 +115,9 @@ return [
     // maximum number of attempts for password confirmation
     'password_confirmation_attempts' => 3,
 
+    // unlock link life (expressed in days)
+    'unlock_link_expire' => 10,
+
     'encryption_token' => [
         // token life after last using expressed in minutes
         'expire' => 3

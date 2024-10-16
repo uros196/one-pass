@@ -40,8 +40,8 @@ class LoginRequest extends FormRequest
      */
     public function authenticate(): void
     {
-        if (User::accountBlocked($this->get('email'))) {
-            $this->failed(__('auth.blocked'));
+        if ($this->isAccountLocked()) {
+            $this->failed(__('auth.locked'));
         }
 
         if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
@@ -68,13 +68,15 @@ class LoginRequest extends FormRequest
             return;
         }
 
-        // market user's account as blocked
-        $is_blocked = User::where('email', $this->get('email'))->first()?->markAsBlocked();
-
-        if ($is_blocked) {
+        if (
+            // if the account is already lock, do not take any action
+            !$this->isAccountLocked()
+            // market user's account as locked
+            && User::where('email', $this->get('email'))->first()?->markAsLocked()
+        ) {
             event(new Lockout($this));
 
-            $this->failed(__('auth.blocked'));
+            $this->failed(__('auth.locked'));
         }
         // this is a case if email does not exist in our system
         else {
@@ -99,6 +101,16 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Check if the account is locked.
+     *
+     * @return bool
+     */
+    protected function isAccountLocked(): bool
+    {
+        return User::isAccountLocked($this->get('email'));
+    }
+
+    /**
      * Inform about failed validation.
      *
      * @param string $message
@@ -109,7 +121,17 @@ class LoginRequest extends FormRequest
     protected function failed(string $message): void
     {
         throw ValidationException::withMessages([
-            'email' => $message,
+            $this->validationFieldName() => $message,
         ]);
+    }
+
+    /**
+     * Define a name to attach a validation error message to it.
+     *
+     * @return string
+     */
+    protected function validationFieldName(): string
+    {
+        return 'email';
     }
 }

@@ -56,15 +56,15 @@ class VerifyMasterPasswordRule implements ValidationRule
             return;
         }
 
-        // market user's account as blocked
-        $this->request->user()->markAsBlocked();
+        // market user's account as locked
+        $this->request->user()->markAsLocked();
 
         event(new Lockout($this->request));
 
-        // after an account has been blocked, automatically log out the user
+        // after an account has been locked, automatically log out the user
         Auth::logout();
 
-        $fail(__('auth.blocked'));
+        $fail(__('auth.locked'));
     }
 
     /**

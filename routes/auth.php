@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\UnlockAccountController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,11 @@ Route::middleware('guest')->group(function () {
     Route::post('register', [RegisteredUserController::class, 'store']);
     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+    // routes for unlocking an account
+    Route::get('unlock-account/{hash}', [UnlockAccountController::class, 'show'])->name('unlock-account.confirm')
+        ->middleware(['signed', 'throttle:6,1']);
+    Route::post('unlock-account', [UnlockAccountController::class, 'store'])->name('unlock-account.verify');
 });
 
 Route::middleware('auth')->group(function () {
