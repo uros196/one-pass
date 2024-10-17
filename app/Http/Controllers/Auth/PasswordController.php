@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\UpdatePasswordRequest;
+use App\Http\Requests\Auth\Password\UpdatePasswordRequest;
 use App\Services\Auth\PasswordService;
 use Illuminate\Http\RedirectResponse;
 

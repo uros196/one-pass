@@ -4,8 +4,8 @@ namespace App\Listeners;
 
 use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AccountLockedListener
 {
@@ -17,7 +17,24 @@ class AccountLockedListener
      */
     public function handle(Lockout $event): void
     {
-        $user = $event->request->user() ?? User::where('email', $event->request->email)->first();
+        $this->sendNotification($event->request);
+
+        // this message will be displayed on the login page
+        $event->request->session()->put('status', __('auth.locked'));
+
+        // because we use this request in many scenarios, log out the user just in case
+        Auth::logout();
+    }
+
+    /**
+     * Inform the user that his account has been locked.
+     *
+     * @param Request $request
+     * @return void
+     */
+    protected function sendNotification(Request $request): void
+    {
+        $user = $request->user() ?? User::where('email', $request->email)->first();
 
         $user->sendUnlockNotification();
     }

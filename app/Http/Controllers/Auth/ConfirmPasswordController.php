@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\ConfirmPasswordRequest;
+use App\Http\Requests\Auth\Password\ConfirmPasswordRequest;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ConfirmablePasswordController extends Controller
+class ConfirmPasswordController extends Controller
 {
     /**
      * Show the confirmation password view.
@@ -23,9 +23,6 @@ class ConfirmablePasswordController extends Controller
      */
     public function store(ConfirmPasswordRequest $request): RedirectResponse
     {
-        $request->authenticate();
-        $request->session()->put('auth.password_confirmed_at', time());
-
         return redirect()->intended(route('dashboard', absolute: false));
     }
 }

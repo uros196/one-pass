@@ -2,9 +2,9 @@
 
 namespace App\Services\Auth;
 
-use App\Http\Requests\Auth\NewPasswordRequest;
+use App\Http\Requests\Auth\Password\NewPasswordRequest;
+use App\Http\Requests\Auth\Password\UpdatePasswordRequest;
 use App\Http\Requests\Auth\RegistrationRequest;
-use App\Http\Requests\Auth\UpdatePasswordRequest;
 use App\Models\User;
 
 class AuthenticationService

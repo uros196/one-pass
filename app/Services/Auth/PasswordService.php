@@ -2,8 +2,8 @@
 
 namespace App\Services\Auth;
 
-use App\Http\Requests\Auth\NewPasswordRequest;
-use App\Http\Requests\Auth\UpdatePasswordRequest;
+use App\Http\Requests\Auth\Password\NewPasswordRequest;
+use App\Http\Requests\Auth\Password\UpdatePasswordRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;

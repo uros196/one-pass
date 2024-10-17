@@ -33,11 +33,6 @@ class UnlockAccountController extends Controller
      */
     public function store(UnlockAccountRequest $request): RedirectResponse
     {
-        $request->authenticate();
-
-        $request->session()->regenerate();
-        $request->session()->put('auth.password_confirmed_at', time());
-
         $request->user()->unlockAccount();
 
         return redirect()->route('dashboard');

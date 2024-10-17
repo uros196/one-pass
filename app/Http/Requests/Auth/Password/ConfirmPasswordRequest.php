@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Auth\Password;
+
+use App\Http\Requests\Auth\LoginRequest;
 
 class ConfirmPasswordRequest extends LoginRequest
 {

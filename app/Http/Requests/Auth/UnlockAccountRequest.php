@@ -23,13 +23,13 @@ class UnlockAccountRequest extends LoginRequest
     }
 
     /**
-     * Mark the account as unlocked so we can pass the authentication.
+     * Proceed to the credential verification even if account is locked.
      *
      * @return bool
      */
-    protected function isAccountLocked(): bool
+    protected function proceedEvenIfLocked(): bool
     {
-        return false;
+        return true;
     }
 
     /**

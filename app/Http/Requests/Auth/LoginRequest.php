@@ -34,13 +34,24 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * After validation passed, try to authenticate the user.
+     *
+     * @return void
+     */
+    protected function passedValidation(): void
+    {
+        $this->authenticate();
+    }
+
+    /**
      * Attempt to authenticate the request's credentials.
      *
+     * @return void
      * @throws ValidationException
      */
     public function authenticate(): void
     {
-        if ($this->isAccountLocked()) {
+        if ($this->isAccountLocked() && !$this->proceedEvenIfLocked()) {
             $this->failed(__('auth.locked'));
         }
 
@@ -54,6 +65,8 @@ class LoginRequest extends FormRequest
         }
 
         RateLimiter::clear($this->throttleKey());
+
+        $this->regenerateSession();
     }
 
     /**
@@ -61,7 +74,7 @@ class LoginRequest extends FormRequest
      *
      * @throws ValidationException
      */
-    public function failedAttempt(): void
+    protected function failedAttempt(): void
     {
         $attempt = config('auth.password_confirmation_attempts');
         if (!RateLimiter::tooManyAttempts($this->throttleKey(), $attempt)) {
@@ -80,12 +93,6 @@ class LoginRequest extends FormRequest
             // if the user reacts immediately, he can confirm the password without waiting
             RateLimiter::clear($this->throttleKey());
 
-            // because we use this request in many scenarios, log out the user just in case
-            Auth::logout();
-
-            // this message will be displayed on the login page
-            $this->session()->put('status', __('auth.locked'));
-
             $this->failed(__('auth.locked'));
         }
         // this is a case if email does not exist in our system
@@ -103,9 +110,22 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Regenerate the session.
+     *
+     * @return void
+     */
+    protected function regenerateSession(): void
+    {
+        $this->session()->regenerate();
+
+        // mark that password is confirmed so the user can access to sensitive part of the application immediately
+        $this->session()->put('auth.password_confirmed_at', time());
+    }
+
+    /**
      * Get the rate limiting throttle key for the request.
      */
-    public function throttleKey(): string
+    protected function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->string('email')) .'|'. $this->ip());
     }
@@ -118,6 +138,17 @@ class LoginRequest extends FormRequest
     protected function isAccountLocked(): bool
     {
         return User::isAccountLocked($this->validated('email'));
+    }
+
+    /**
+     * Indicates that we need to proceed to verification process event if the account is locked.
+     * (default: if the account is locked, we immediately stop the verification and show the error message)
+     *
+     * @return bool
+     */
+    protected function proceedEvenIfLocked(): bool
+    {
+        return false;
     }
 
     /**
