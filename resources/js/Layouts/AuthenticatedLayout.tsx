@@ -4,6 +4,7 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
+import UserActivityCheck from "@/Components/UserActivityCheck";
 
 export default function Authenticated({
     header,
@@ -174,6 +175,8 @@ export default function Authenticated({
             )}
 
             <main>{children}</main>
+
+            <UserActivityCheck />
         </div>
     );
 }

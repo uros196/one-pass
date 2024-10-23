@@ -6,6 +6,7 @@ use App\Http\Requests\Auth\Password\NewPasswordRequest;
 use App\Http\Requests\Auth\Password\UpdatePasswordRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class PasswordService
@@ -46,5 +47,21 @@ class PasswordService
                 event(new PasswordReset($user));
             }
         );
+    }
+
+    /**
+     * Determine if the user needs to confirm the password in order to access
+     * the secured area of the application.
+     *
+     * @param Request $request
+     * @param int|null $passwordTimeoutSeconds
+     *
+     * @return bool
+     */
+    public function shouldConfirm(Request $request, ?int $passwordTimeoutSeconds = null): bool
+    {
+        $confirmedAt = time() - $request->session()->get('auth.password_confirmed_at', 0);
+
+        return $confirmedAt > ($passwordTimeoutSeconds ?? config('auth.password_timeout'));
     }
 }

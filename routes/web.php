@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\ActivityCheckController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,7 @@ Route::middleware(['auth', 'verified', 'password.confirm'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 
+
     // TEST METHODS (delete them after tests ends)
     Route::controller(\App\Http\Controllers\TestController::class)->group(function () {
         Route::get('/create-encrypt-token', 'encryptTokenForm')->name('show-encrypt-token-form');
@@ -34,5 +36,7 @@ Route::middleware(['auth', 'verified', 'password.confirm'])->group(function () {
         Route::post('/decrypt', 'decryptData')->middleware('encrypted')->name('decrypt');
     });
 });
+
+Route::get('/activity/check', ActivityCheckController::class)->name('activity.check');
 
 require __DIR__.'/auth.php';

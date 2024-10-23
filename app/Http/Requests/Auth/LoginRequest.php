@@ -7,6 +7,7 @@ use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -119,7 +120,7 @@ class LoginRequest extends FormRequest
         $this->session()->regenerate();
 
         // mark that password is confirmed so the user can access to sensitive part of the application immediately
-        $this->session()->put('auth.password_confirmed_at', time());
+        Session::passwordConfirmed();
     }
 
     /**

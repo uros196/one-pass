@@ -17,7 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'encrypted' => \App\Http\Middleware\VerifyEncryptionTokenMiddleware::class
+            'encrypted' => \App\Http\Middleware\VerifyEncryptionTokenMiddleware::class,
+            'password.confirm' => \App\Http\Middleware\RequirePassword::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
