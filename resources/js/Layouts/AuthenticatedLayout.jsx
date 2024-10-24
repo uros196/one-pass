@@ -2,18 +2,16 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link, usePage } from '@inertiajs/react';
-import { PropsWithChildren, ReactNode, useState } from 'react';
+import {Link, useForm, usePage} from '@inertiajs/react';
+import { useState } from 'react';
 import UserActivityCheck from "@/Components/UserActivityCheck";
+import Hotkeys from 'react-hot-keys';
 
-export default function Authenticated({
-    header,
-    children,
-}: PropsWithChildren<{ header?: ReactNode }>) {
+export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
+    const { post } = useForm();
 
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
+    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -65,16 +63,13 @@ export default function Authenticated({
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route('profile.edit')}
-                                        >
+                                        <Dropdown.Link href={route('profile.edit')}>
                                             Profile
                                         </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route('logout')}
-                                            method="post"
-                                            as="button"
-                                        >
+                                        <Dropdown.Link href={route('lockout')} method="POST" as="button">
+                                            Lockout
+                                        </Dropdown.Link>
+                                        <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
                                     </Dropdown.Content>
@@ -154,11 +149,10 @@ export default function Authenticated({
                             <ResponsiveNavLink href={route('profile.edit')}>
                                 Profile
                             </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                method="post"
-                                href={route('logout')}
-                                as="button"
-                            >
+                            <ResponsiveNavLink href={route('lockout')} method="POST" as="button">
+                                Lockout
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink href={route('logout')} method="post" as="button">
                                 Log Out
                             </ResponsiveNavLink>
                         </div>
@@ -177,6 +171,9 @@ export default function Authenticated({
             <main>{children}</main>
 
             <UserActivityCheck />
+            <Hotkeys keyName="shift+l" onKeyDown={() => {
+                post(route('lockout'))
+            }} />
         </div>
     );
 }

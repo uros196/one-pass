@@ -1,36 +1,35 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import InputLabel from "@/Components/InputLabel";
+import TextInput from "@/Components/TextInput";
+import InputError from "@/Components/InputError";
+import PrimaryButton from "@/Components/PrimaryButton";
 
-export default function ConfirmPassword() {
-    const { data, setData, post, processing, errors, reset } = useForm({
+export default function UnlockAccount({hash}) {
+    const { data, setData, post, reset, processing, errors } = useForm({
+        hash: hash,
         password: '',
-    });
+    })
 
-    const submit: FormEventHandler = (e) => {
+    const submit = (e) => {
         e.preventDefault();
 
-        post(route('password.confirm'), {
+        post(route('unlock-account.verify'), {
             onFinish: () => reset('password'),
         });
     };
 
     return (
         <GuestLayout>
-            <Head title="Confirm Password" />
+            <Head title="Unlock your account"/>
 
             <div className="mb-4 text-sm text-gray-600">
-                This is a secure area of the application. Please confirm your
-                password before continuing.
+                Confirm the password in order to unlock your account.
             </div>
 
             <form onSubmit={submit}>
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="Password"/>
 
                     <TextInput
                         id="password"
@@ -38,16 +37,15 @@ export default function ConfirmPassword() {
                         name="password"
                         value={data.password}
                         className="mt-1 block w-full"
-                        isFocused={true}
                         onChange={(e) => setData('password', e.target.value)}
                     />
 
-                    <InputError message={errors.password} className="mt-2" />
+                    <InputError message={errors.password} className="mt-2"/>
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Confirm
+                        Unlock
                     </PrimaryButton>
                 </div>
             </form>
