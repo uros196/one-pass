@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Encryption\MasterKeyRequest;
+use App\Http\Requests\Encryption\ChallengeMasterKeyRequest;
 use App\Models\Concerns\HasSensitiveData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -27,10 +27,10 @@ class TestController extends Controller
     /**
      * Create 'Encrypt Token' and use it for unlock sensitive data.
      *
-     * @param MasterKeyRequest $request
+     * @param ChallengeMasterKeyRequest $request
      * @return RedirectResponse
      */
-    public function createEncryptToken(MasterKeyRequest $request): /*JsonResponse*/ RedirectResponse
+    public function createEncryptToken(ChallengeMasterKeyRequest $request): /*JsonResponse*/ RedirectResponse
     {
         // return response()->json(
         //     $request->user()->createToken($request)

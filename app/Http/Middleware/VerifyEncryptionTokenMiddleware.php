@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\Encryption\MasterKey;
+use App\Services\Encryption\Challenge\ChallengeMasterKey;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,8 +16,11 @@ class VerifyEncryptionTokenMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // 'MasterKeyRequest' will verify token validity
-        app(MasterKey::class)->decrypt();
+        // 'ChallengeMasterKeyRequest' will verify token validity
+        app(ChallengeMasterKey::class)->decrypt();
+
+        // regenerate encryption token foreign key after successful validation
+        $request->user()->regenerateTokenForeignKey();
 
         return $next($request);
     }

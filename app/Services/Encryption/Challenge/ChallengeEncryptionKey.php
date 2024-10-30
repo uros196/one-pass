@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\Encryption;
+namespace App\Services\Encryption\Challenge;
 
 use App\Models\User;
 use Illuminate\Support\Str;
 
-class EncryptionKey
+class ChallengeEncryptionKey
 {
     /**
      * Create a unique part of the encryption key based on user data.
@@ -17,10 +17,16 @@ class EncryptionKey
     {
         $string = sprintf(
             '%s|%s|%d|%s',
-            $user->id, $user->email, now()->timestamp, Str::random(32)
+            $user->id, $user->email, now()->timestamp, Str::random(64)
         );
 
-        return Str::substr(hash('sha512', $string), rand(0, 64), 64);
+        // encryption key length
+        $key_length = 64;
+
+        // dynamically choose start point
+        $start_at = rand(0, (Str::length($string) - $key_length));
+
+        return Str::substr(hash('sha512', $string), $start_at, $key_length);
     }
 
     /**
@@ -35,7 +41,7 @@ class EncryptionKey
         $plain_text_key = sprintf(
             '%s|%s|%s',
             config('app.key'),
-            MasterKey::get(),
+            ChallengeMasterKey::get(),
             $user->encryptionKey->key
         );
 

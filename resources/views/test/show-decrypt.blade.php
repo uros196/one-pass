@@ -5,6 +5,7 @@
     @error('encryption_token')
         {{ $message }}
     @enderror
+    <br>
     <label for="data">Decrypt data</label>
     <input type="text" name="data" id="data" value="{{ request('encrypted') }}" />
     <button type="submit">Decrypt</button>

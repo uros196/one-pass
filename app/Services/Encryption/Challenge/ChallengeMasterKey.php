@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Services\Encryption;
+namespace App\Services\Encryption\Challenge;
 
-use App\Http\Requests\Encryption\MasterKeyRequest;
+use App\Http\Requests\Encryption\ChallengeMasterKeyRequest;
 use App\Models\User;
-use App\Services\Encryption\Token\TokenFactory;
+use App\Services\Encryption\Encrypter;
 
 /**
  * 'Master Password' is a thing that only a user knows.
  * We're using a 'Master Password' for making a 'Master Key'.
  * And a 'Master Key' is a key factor for unlocking 'Encryption Key' that is used for encrypt/decrypt sensitive data.
  */
-class MasterKey
+class ChallengeMasterKey
 {
     /**
      * MasterKey constructor.
      *
      * Use 'MasterKeyRequest' request for accessing data we need
      *
-     * @param MasterKeyRequest $request
+     * @param ChallengeMasterKeyRequest $request
      */
-    public function __construct(protected MasterKeyRequest $request)
+    public function __construct(protected ChallengeMasterKeyRequest $request)
     {
         // start validation in case someone tries to pass an empty request (created manually)
         // or non-validated request
@@ -113,7 +113,7 @@ class MasterKey
     }
 
     /**
-     * Get the 'Encryption Key', a key for encrypting/decrypting a 'Master Key'.
+     * Get the 'Encryption Key', a key for encrypting/decrypting a 'Master Key' from DB.
      *
      * @return string|null
      */
@@ -122,14 +122,12 @@ class MasterKey
         // we 'salt' the token in case it becomes exposed,
         // so it cannot be used outside the environment where is it created
         return TokenFactory::salt(
-            // TODO: consider how to resolve this problem, we're modifying request object while creating an encryption token
-            // $this->request->validated('encryption_token')
-            $this->request->encryption_token
+             $this->request->validated('encryption_token')
         );
     }
 
     /**
-     * Get the encryptor that is configured specifically for 'Master Key'.
+     * Get the encrypter that is configured specifically for 'Master Key'.
      *
      * @return Encrypter
      */

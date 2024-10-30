@@ -2,18 +2,12 @@
 
 namespace App\Services\Encryption;
 
-use App\Models\User;
+use App\Services\Encryption\Challenge\ChallengeEncryptionKey;
 use Illuminate\Encryption\Encrypter as BaseEncrypter;
+use Illuminate\Http\Request;
 
 class Encrypter
 {
-    /**
-     * Holds current logged user model.
-     *
-     * @var User|mixed $user
-     */
-    protected User $user;
-
     /**
      * Key for encryption/decryption.
      *
@@ -24,13 +18,11 @@ class Encrypter
     /**
      * Encrypter constructor.
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->user = request()->user();
-
         // this encrypter is mainly used for unlock user's sensitive data
         // by default, we're setting user Encryption Key
-        $this->usingKey(EncryptionKey::get($this->user));
+        $this->usingKey(ChallengeEncryptionKey::get($request->user()));
     }
 
     /**

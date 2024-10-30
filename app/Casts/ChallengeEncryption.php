@@ -2,8 +2,8 @@
 
 namespace App\Casts;
 
+use App\Services\Encryption\Challenge\ChallengeMasterKey;
 use App\Services\Encryption\Encrypter;
-use App\Services\Encryption\MasterKey;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @template TGet
  * @template TSet
  */
-class Encryptable implements CastsAttributes
+class ChallengeEncryption implements CastsAttributes
 {
     /**
      * Cast the given value.
@@ -66,6 +66,6 @@ class Encryptable implements CastsAttributes
      */
     protected function hasMasterKey(): bool
     {
-        return MasterKey::exists();
+        return ChallengeMasterKey::exists();
     }
 }

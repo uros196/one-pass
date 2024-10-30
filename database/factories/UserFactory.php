@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use App\Services\Encryption\EncryptionKey;
+use App\Services\Encryption\Challenge\ChallengeEncryptionKey;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -54,7 +54,7 @@ class UserFactory extends Factory
         return $this->afterCreating(function (User $user) {
             // make a unique part of the encryption key
             $user->encryptionKey()->create([
-                'key' => EncryptionKey::makeFor($user)
+                'key' => ChallengeEncryptionKey::makeFor($user)
             ]);
         });
     }

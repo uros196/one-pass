@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Encryption\Token;
+namespace App\Services\Encryption\Challenge;
 
 use App\Models\EncryptionToken;
 use Illuminate\Support\Str;
@@ -28,6 +28,20 @@ class TokenFactory
     public static function isExpired(EncryptionToken $model): bool
     {
         return $model->expires_at->isPast();
+    }
+
+    /**
+     * Extend token life.
+     *
+     * @param EncryptionToken $model
+     * @return void
+     */
+    public static function extendTokenLife(EncryptionToken $model): void
+    {
+        $model->forceFill([
+            'last_used_at' => now(),
+            'expires_at'   => now()->addMinutes(config('auth.encryption_token.expire')),
+        ])->save();
     }
 
     /**

@@ -2,8 +2,8 @@
 
 namespace App\Models\Concerns;
 
+use App\Services\Encryption\Challenge\ChallengeMasterKey;
 use App\Services\Encryption\Encrypter;
-use App\Services\Encryption\MasterKey;
 
 /**
  * This trait is supposed to use on Models.
@@ -118,14 +118,14 @@ trait HasSensitiveData
 
     /**
      * Decrypt data using customized encrypter.
-     * If a master key does not exist, retrieve hidden string.
+     * If a Master Key does not exist, retrieve hidden string.
      *
      * @param string $data
      * @return mixed
      */
     protected function decrypt(string $data): mixed
     {
-        return MasterKey::exists()
+        return ChallengeMasterKey::exists()
             ? $this->getEncrypter()->decrypt($data)
             : '••••••••••••';
     }
