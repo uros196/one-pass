@@ -2,8 +2,8 @@
 
 namespace App\Models\Concerns;
 
+use App\Services\Encryption\Challenge\ChallengeEncrypter;
 use App\Services\Encryption\Challenge\ChallengeMasterKey;
-use App\Services\Encryption\Encrypter;
 
 /**
  * This trait is supposed to use on Models.
@@ -133,10 +133,10 @@ trait HasSensitiveData
     /**
      * Get 'Encrypter' instance.
      *
-     * @return Encrypter
+     * @return ChallengeEncrypter
      */
-    protected function getEncrypter(): Encrypter
+    protected function getEncrypter(): ChallengeEncrypter
     {
-        return app(Encrypter::class);
+        return app(ChallengeEncrypter::class);
     }
 }

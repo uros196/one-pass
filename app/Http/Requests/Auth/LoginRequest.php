@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use App\Models\User;
+use App\Services\Encryption\Basic\BasicEncryptionKey;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -42,6 +43,9 @@ class LoginRequest extends FormRequest
     protected function passedValidation(): void
     {
         $this->authenticate();
+
+        // set the key for basic system of encryption/decryption
+        BasicEncryptionKey::set($this);
     }
 
     /**

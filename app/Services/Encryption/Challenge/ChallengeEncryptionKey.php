@@ -15,18 +15,26 @@ class ChallengeEncryptionKey
      */
     public static function makeFor(User $user): string
     {
+        /*
+         * this is complex solution but more unique string will be generated with Str::random()
+         *
         $string = sprintf(
             '%s|%s|%d|%s',
             $user->id, $user->email, now()->timestamp, Str::random(64)
         );
+        $hashed = hash('sha512', $string);
 
         // encryption key length
-        $key_length = 64;
+        $key_length = 128;
 
         // dynamically choose start point
-        $start_at = rand(0, (Str::length($string) - $key_length));
+        $start_at = rand(0, max((Str::length($hashed) - $key_length), 1));
 
-        return Str::substr(hash('sha512', $string), $start_at, $key_length);
+        return Str::substr($hashed, $start_at, $key_length);
+         *
+         */
+
+        return Str::random(128);
     }
 
     /**

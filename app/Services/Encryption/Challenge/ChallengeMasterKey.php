@@ -4,7 +4,7 @@ namespace App\Services\Encryption\Challenge;
 
 use App\Http\Requests\Encryption\ChallengeMasterKeyRequest;
 use App\Models\User;
-use App\Services\Encryption\Encrypter;
+use Illuminate\Encryption\Encrypter;
 
 /**
  * 'Master Password' is a thing that only a user knows.
@@ -133,6 +133,6 @@ class ChallengeMasterKey
      */
     protected function encrypter(): Encrypter
     {
-        return app(Encrypter::class)->usingKey($this->getEncryptionKey());
+        return new Encrypter($this->getEncryptionKey());
     }
 }

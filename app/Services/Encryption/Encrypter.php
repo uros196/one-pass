@@ -2,29 +2,10 @@
 
 namespace App\Services\Encryption;
 
-use App\Services\Encryption\Challenge\ChallengeEncryptionKey;
 use Illuminate\Encryption\Encrypter as BaseEncrypter;
-use Illuminate\Http\Request;
 
-class Encrypter
+abstract class Encrypter
 {
-    /**
-     * Key for encryption/decryption.
-     *
-     * @var string $key
-     */
-    protected string $key;
-
-    /**
-     * Encrypter constructor.
-     */
-    public function __construct(Request $request)
-    {
-        // this encrypter is mainly used for unlock user's sensitive data
-        // by default, we're setting user Encryption Key
-        $this->usingKey(ChallengeEncryptionKey::get($request->user()));
-    }
-
     /**
      * Encrypt sensitive data using a key specific by user.
      *
@@ -50,14 +31,9 @@ class Encrypter
     /**
      * Using custom key.
      *
-     * @param string $key
-     * @return self
+     * @return string
      */
-    public function usingKey(string $key): self
-    {
-        $this->key = $key;
-        return $this;
-    }
+    abstract protected function usingKey(): string;
 
     // TODO: make 'usingKeys' function for setting previous keys variation (useful while changing Mater Password)
 
@@ -69,7 +45,7 @@ class Encrypter
     public function getEncrypter(): BaseEncrypter
     {
         return new BaseEncrypter(
-            key: $this->key,
+            key: $this->usingKey(),
             cipher: config('app.cipher')
         );
     }

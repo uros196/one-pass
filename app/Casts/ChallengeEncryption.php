@@ -2,8 +2,8 @@
 
 namespace App\Casts;
 
+use App\Services\Encryption\Challenge\ChallengeEncrypter;
 use App\Services\Encryption\Challenge\ChallengeMasterKey;
-use App\Services\Encryption\Encrypter;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -52,11 +52,11 @@ class ChallengeEncryption implements CastsAttributes
     /**
      * Get the encrypter object.
      *
-     * @return Encrypter
+     * @return ChallengeEncrypter
      */
-    protected function encrypter(): Encrypter
+    protected function encrypter(): ChallengeEncrypter
     {
-        return app(Encrypter::class);
+        return app(ChallengeEncrypter::class);
     }
 
     /**
