@@ -4,7 +4,6 @@ namespace App\Http\Requests\Encryption;
 
 use App\Rules\VerifyChallengeEncryptionTokenRule;
 use App\Rules\VerifyMasterPasswordRule;
-use App\Rules\VerifyUserRequestRule;
 use App\Services\Encryption\Challenge\TokenFactory;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -12,15 +11,16 @@ use Illuminate\Validation\Rules\ExcludeIf;
 
 /**
  * This request is using for validating 'Master Password' or validating
- * token that will decrypt 'Master Key'.
+ * token that will decrypt 'Challenge Signature'.
  *
- * The 'Master Password' is a part of the 'Master Key', and 'Master Key' is used for making an 'Encryption Key'.
+ * The 'Master Password' is a part of the 'Challenge Signature', and 'Challenge Signature' is used
+ * alongside 'Encryption Public Key' for making a final 'Encryption Key'.
  * 'Encryption Key' is the most important part of the 'sensitive data encrypting' system.
  * It is used as a key while encrypting/decrypting user's sensitive data.
  *
  * This request validates data needs for a challenge encryption system.
  */
-class ChallengeMasterKeyRequest extends FormRequest
+class ChallengeSignatureRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -49,18 +49,12 @@ class ChallengeMasterKeyRequest extends FormRequest
                 new VerifyMasterPasswordRule($this)
             ],
 
-            // required while decrypting a Master Key
+            // required while decrypting a Challenge Signature
             'encryption_token' => [
                 // this field will be excluded from the 'validate' and 'validated'
                 // if 'password' is present in the request and validate ALL is not requested
                 $this->excludeWith('password'),
                 'required',
-
-                // TODO: fix this
-                // every time request runs validation, session is regenerating and data is
-                // not available in DB anymore and user's request can not be validated
-                // new VerifyUserRequestRule($this),
-
                 new VerifyChallengeEncryptionTokenRule($this)
             ],
         ];

@@ -3,7 +3,6 @@
 namespace App\Services\Encryption\Challenge;
 
 use App\Models\EncryptionToken;
-use Illuminate\Support\Str;
 
 class TokenFactory
 {
@@ -56,15 +55,16 @@ class TokenFactory
     }
 
     /**
-     * Salt the token with the data from the request.
+     * Salt the token with the data from the request,
+     * so it cannot be used outside the environment where is it created.
      *
      * @param string $token
      * @return string
      */
     public static function salt(string $token): string
     {
-        $salted_token = "$token|". request()->ip();
+        $salted_token = "$token|". hash('crc32b', request()->ip());
 
-        return Str::substr(hash('sha512', $salted_token), 32, 32);
+        return hash('sha512', $salted_token);
     }
 }

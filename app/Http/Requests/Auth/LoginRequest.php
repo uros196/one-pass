@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use App\Models\User;
-use App\Services\Encryption\Basic\BasicEncryptionKey;
+use App\Services\Encryption\Basic\BasicSignature;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -45,7 +45,7 @@ class LoginRequest extends FormRequest
         $this->authenticate();
 
         // set the key for basic system of encryption/decryption
-        BasicEncryptionKey::set($this);
+        BasicSignature::set($this);
     }
 
     /**

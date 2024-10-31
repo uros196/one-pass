@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('token');
-            $table->text('master_key');
+            $table->text('signature');
             $table->string('session_id');
             $table->dateTime('last_used_at')->nullable()->default(null);
             $table->dateTime('expires_at');

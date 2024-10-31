@@ -2,12 +2,11 @@
 
 namespace App\Models\Concerns;
 
-use App\Services\Encryption\Challenge\ChallengeEncrypter;
-use App\Services\Encryption\Challenge\ChallengeMasterKey;
+use App\Services\Encryption\Encrypter;
 
 /**
  * This trait is supposed to use on Models.
- * Instead of this, use 'Encryptable' caster for cast sensitive fields.
+ * Instead of this, use 'ChallengeEncryption' caster for cast sensitive fields.
  *
  * @property array $sensitive_data
  */
@@ -113,30 +112,30 @@ trait HasSensitiveData
      */
     protected function encrypt(#[\SensitiveParameter] mixed $data): string
     {
-        return $this->getEncrypter()->encrypt($data);
+        return $this->encrypter()->encrypt($data);
     }
 
     /**
      * Decrypt data using customized encrypter.
-     * If a Master Key does not exist, retrieve hidden string.
+     * If a Challenge Signature does not exist, retrieve hidden string.
      *
      * @param string $data
      * @return mixed
      */
     protected function decrypt(string $data): mixed
     {
-        return ChallengeMasterKey::exists()
-            ? $this->getEncrypter()->decrypt($data)
+        return $this->encrypter()->canDecrypt($data)
+            ? $this->encrypter()->decrypt($data)
             : '••••••••••••';
     }
 
     /**
-     * Get 'Encrypter' instance.
+     * Get the encrypter object.
      *
-     * @return ChallengeEncrypter
+     * @return Encrypter
      */
-    protected function getEncrypter(): ChallengeEncrypter
+    protected function encrypter(): Encrypter
     {
-        return app(ChallengeEncrypter::class);
+        return app('challenge-encrypter');
     }
 }

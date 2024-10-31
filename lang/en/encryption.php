@@ -2,11 +2,6 @@
 
 return [
 
-    'master_key' => [
-        'failed' => 'Provided Master Key is invalid.',
-        'missing' => 'Encryption Error! Master Key is missing.',
-    ],
-
     'token' => [
         'expired' => 'Token expired.',
         'failed' => 'Provided Token is invalid.',

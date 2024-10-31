@@ -15,7 +15,7 @@ class EncryptionToken extends Model
     protected $fillable = [
         'user_id',
         'token',
-        'master_key',
+        'signature',
         'session_id',
         'last_used_at',
         'expires_at',

@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Models\User;
-use App\Services\Encryption\Challenge\ChallengeEncryptionKey;
+use App\Services\Encryption\EncryptionKey;
 use Illuminate\Auth\Events\Registered;
 
 class CreateEncryptionKeyListener
@@ -20,7 +20,7 @@ class CreateEncryptionKeyListener
         $user = $event->user;
 
         $user->encryptionKey()->create([
-            'key' => ChallengeEncryptionKey::makeFor($user)
+            'public_key' => EncryptionKey::makePublicKey()->getPublicKey()
         ]);
     }
 }

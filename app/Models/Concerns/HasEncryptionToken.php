@@ -2,9 +2,9 @@
 
 namespace App\Models\Concerns;
 
-use App\Http\Requests\Encryption\ChallengeMasterKeyRequest;
+use App\Http\Requests\Encryption\ChallengeSignatureRequest;
 use App\Models\EncryptionToken;
-use App\Services\Encryption\Challenge\ChallengeMasterKey;
+use App\Services\Encryption\Challenge\ChallengeSignature;
 use App\Services\Encryption\Challenge\TokenFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
@@ -24,21 +24,21 @@ trait HasEncryptionToken
 
     /**
      * Create the encryption token.
-     * This token will be used for decrypting 'Master Key'.
+     * This token will be used for decrypting 'Challenge Signature'.
      *
      * This short-life token allows us the ability to 'unlock' encrypted data without
      * providing 'Master Password' every time.
      *
-     * @param ChallengeMasterKeyRequest $request
+     * @param ChallengeSignatureRequest $request
      * @return string
      */
-    public function createToken(ChallengeMasterKeyRequest $request): string
+    public function createToken(ChallengeSignatureRequest $request): string
     {
         $token = $this->generateTokenString();
 
         $model = $this->encryptionToken()->create([
-            'token' => TokenFactory::create($token),
-            'master_key' => 'encryption key preparing...',
+            'token'      => TokenFactory::create($token),
+            'signature'  => 'signature is preparing...',
             'session_id' => $this->sessionForeignKey(),
 
             // TODO: read this from the user's config
@@ -51,9 +51,9 @@ trait HasEncryptionToken
             'validate_all'      => true
         ]);
 
-        // use modified request (with the token) to encrypt a challenge Master Key
+        // use modified request (with the token) to encrypt a Challenge Signature
         $model->forceFill([
-            'master_key' => app(ChallengeMasterKey::class)->encrypt(),
+            'signature' => app(ChallengeSignature::class)->encrypt(),
         ])->save();
 
         return $token;

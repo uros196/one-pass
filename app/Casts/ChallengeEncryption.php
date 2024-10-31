@@ -2,8 +2,8 @@
 
 namespace App\Casts;
 
-use App\Services\Encryption\Challenge\ChallengeEncrypter;
-use App\Services\Encryption\Challenge\ChallengeMasterKey;
+use App\Services\Encryption\Challenge\ChallengeSignature;
+use App\Services\Encryption\Encrypter;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,7 +25,7 @@ class ChallengeEncryption implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        return $this->hasMasterKey()
+        return $this->encrypter()->canDecrypt($value)
             ? $this->encrypter()->decrypt($value)
             : '••••••••••••••••••';
     }
@@ -42,8 +42,8 @@ class ChallengeEncryption implements CastsAttributes
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): string
     {
-        if (!$this->hasMasterKey()) {
-            throw new \InvalidArgumentException(__('encryption.master_key.missing'));
+        if (!ChallengeSignature::exists()) {
+            throw new \InvalidArgumentException('Encryption Error! Challenge Signature is missing.');
         }
 
         return $this->encrypter()->encrypt($value);
@@ -52,20 +52,10 @@ class ChallengeEncryption implements CastsAttributes
     /**
      * Get the encrypter object.
      *
-     * @return ChallengeEncrypter
+     * @return Encrypter
      */
-    protected function encrypter(): ChallengeEncrypter
+    protected function encrypter(): Encrypter
     {
-        return app(ChallengeEncrypter::class);
-    }
-
-    /**
-     * Check if the 'Master Key' exists or not.
-     *
-     * @return bool
-     */
-    protected function hasMasterKey(): bool
-    {
-        return ChallengeMasterKey::exists();
+        return app('challenge-encrypter');
     }
 }

@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use App\Services\Encryption\Challenge\ChallengeEncryptionKey;
+use App\Services\Encryption\EncryptionKey;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -52,9 +52,9 @@ class UserFactory extends Factory
     public function configure(): self
     {
         return $this->afterCreating(function (User $user) {
-            // make a unique part of the encryption key
+            // make the public key, a unique part of the final encryption key
             $user->encryptionKey()->create([
-                'key' => ChallengeEncryptionKey::makeFor($user)
+                'public_key' => EncryptionKey::makePublicKey()->getPublicKey()
             ]);
         });
     }

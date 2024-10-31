@@ -36,7 +36,7 @@ class VerifyMasterPasswordRule implements ValidationRule
             RateLimiter::hit($this->throttleKey());
             $this->failedAttempt($fail);
 
-            $fail(__('encryption.master_key.failed'));
+            $fail(__('auth.password'));
         }
         else {
             RateLimiter::clear($this->throttleKey());

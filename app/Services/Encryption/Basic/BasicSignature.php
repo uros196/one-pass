@@ -10,11 +10,12 @@ use Illuminate\Support\Str;
 
 /**
  * Class for creating and retrieving an encryption key that will be used in a Basic Encryption system.
- * Its combine a raw user's Master Password and encryption key which is unique by the user (key made in the registration process).
+ * Its combine a raw user's 'Master Password' and encryption public key which is
+ * unique by the user (key made in the registration process).
  * Such a key will be stored in the session for easier use.
  * Basis Encryption system is used for encryption less sensitive data such as email, usernames, etc.
  */
-class BasicEncryptionKey
+class BasicSignature
 {
     protected const SESSION_KEY = '_basicEncryptionKey';
 
@@ -61,8 +62,9 @@ class BasicEncryptionKey
      */
     protected static function make(User $user, #[\SensitiveParameter] string $master_password): string
     {
-        // combine raw user Master Password and encryption key unique by the user (key made in the registration process)
-        $has = hash('sha256', "{$master_password}-{$user->encryptionKey->key}");
-        return Str::substr($has, 0, 32);
+        // make a simple signature by combining raw user Master Password and user ID
+        $signature = hash('sha256', sprintf('%s.$1gN.%s', $master_password, $user->id));
+        // cut the final string so the Master Password cannot be guessed
+        return Str::substr($signature, 0, 32);
     }
 }
