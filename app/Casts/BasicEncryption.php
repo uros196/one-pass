@@ -2,7 +2,7 @@
 
 namespace App\Casts;
 
-use App\Services\Encryption\Basic\BasicEncrypter;
+use App\Services\Encryption\Encrypter;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -45,10 +45,10 @@ class BasicEncryption implements CastsAttributes
     /**
      * Get the encrypter object.
      *
-     * @return BasicEncrypter
+     * @return Encrypter
      */
-    protected function encrypter(): BasicEncrypter
+    protected function encrypter(): Encrypter
     {
-        return app(BasicEncrypter::class);
+        return app('basic-encrypter');
     }
 }
