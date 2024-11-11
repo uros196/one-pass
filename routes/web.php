@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\ActivityCheckController;
+use App\Http\Controllers\DesignStaticController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,8 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+Route::get('/design-static/{page?}', DesignStaticController::class)->name('design-static');
 
 Route::middleware(['auth', 'verified', 'password.confirm'])->group(function () {
     Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
