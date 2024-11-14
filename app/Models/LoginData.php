@@ -17,7 +17,7 @@ class LoginData extends Model
      *
      * @var string|null
      */
-    protected $table = 'login_data';
+    protected $table = 'logins_data';
 
     /**
      * The attributes that are mass assignable.
