@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\LoginData;
 
 use App\Models\LoginData;
 use Illuminate\Http\Request;
@@ -11,6 +11,8 @@ class LoginDataResource extends JsonResource
 {
     /**
      * Transform resource into an array.
+     *
+     * Used for populating a form.
      *
      * @param Request $request
      * @return array
@@ -24,7 +26,6 @@ class LoginDataResource extends JsonResource
             'password' => $this->password,
             'url' => $this->url,
             'note' => $this->note,
-            // TODO: add website favicon url
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

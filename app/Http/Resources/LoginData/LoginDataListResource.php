@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Resources\NoteData;
+namespace App\Http\Resources\LoginData;
 
-use App\Models\NoteData;
+use App\Models\LoginData;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin NoteData */
-class NoteDataListResource extends JsonResource
+/** @mixin LoginData */
+class LoginDataListResource extends JsonResource
 {
     /**
      * Transform resource into an array.
@@ -21,12 +21,11 @@ class NoteDataListResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => NoteData::class,
+            'type' => LoginData::class,
             'name' => $this->name,
-            'color' => [
-                'background_color' => $this->color->backgroundColor(),
-                'text_color' => $this->color->fontColor()
-            ],
+            'username' => $this->username,
+            'url' => $this->url,
+            // TODO: add website favicon url
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
