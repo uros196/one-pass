@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\ActivityCheckController;
 use App\Http\Controllers\DesignStaticController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SensitiveDataController;
+use App\Services\SensitiveData\Router as DataRouter;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,7 +27,18 @@ Route::middleware(['auth', 'verified', 'password.confirm'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
+    Route::controller(SensitiveDataController::class)
+        ->prefix('sensitive-data/{type}')
+        ->whereIn('type', DataRouter::getAvailableTypes())
+        ->group(function () {
+            Route::get('/', 'index')->name('sensitive-data.index');
+            Route::get('/create', 'create')->name('sensitive-data.create');
+            Route::post('/', 'store')->name('sensitive-data.store');
+            Route::get('/{id}', 'show')->whereUuid('id')->name('sensitive-data.show');
+            Route::get('/{id}/edit', 'edit')->whereUuid('id')->name('sensitive-data.edit');
+            Route::patch('/{id}', 'update')->whereUuid('id')->name('sensitive-data.update');
+            Route::delete('/{id}', 'destroy')->whereUuid('id')->name('sensitive-data.destroy');
+        });
 
     // TEST METHODS (delete them after tests ends)
     Route::controller(\App\Http\Controllers\TestController::class)->group(function () {

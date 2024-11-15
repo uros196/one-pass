@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\SensitiveData;
 
 use App\Enums\CardColors;
 use Illuminate\Foundation\Http\FormRequest;
