@@ -4,6 +4,8 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
+import PasswordInput from "@/Components/Form/PasswordInput";
+import { Button } from "@nextui-org/button";
 
 export default function ConfirmPassword() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -29,7 +31,7 @@ export default function ConfirmPassword() {
 
             <form onSubmit={submit}>
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    {/* <InputLabel htmlFor="password" value="Password" />
 
                     <TextInput
                         id="password"
@@ -39,15 +41,28 @@ export default function ConfirmPassword() {
                         className="mt-1 block w-full"
                         isFocused={true}
                         onChange={(e) => setData('password', e.target.value)}
-                    />
+                    /> */}
+                    
 
+
+                    <PasswordInput
+                        label="Password"
+                        variant="bordered"
+                        name="password"
+                        value={data.password}
+                        autoComplete="current-password"
+                        onChange={(e) => setData("password", e.target.value)}
+                    />
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                    {/* <PrimaryButton className="ms-4" disabled={processing}>
                         Confirm
-                    </PrimaryButton>
+                    </PrimaryButton> */}
+                     <Button type="submit" color="primary" variant="flat">
+                        CONFIRM
+                    </Button>
                 </div>
             </form>
         </GuestLayout>

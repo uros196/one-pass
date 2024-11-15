@@ -1,11 +1,11 @@
-import Checkbox from "@/Components/Checkbox";
+
 import InputError from "@/Components/InputError";
-import InputLabel from "@/Components/InputLabel";
-import PrimaryButton from "@/Components/PrimaryButton";
- import GuestLayout from "@/Layouts/GuestLayout";
-import { Head, Link, useForm } from "@inertiajs/react";
+
+import GuestLayout from "@/Layouts/GuestLayout";
+import { Head, useForm } from "@inertiajs/react";
 import PasswordInput from "@/Components/Form/PasswordInput";
-import { Input } from "@nextui-org/react";
+import { Input, Link, Checkbox, Button } from "@nextui-org/react";
+
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -42,7 +42,6 @@ export default function Login({ status, canResetPassword }) {
                         labelPlacement="inside"
                         value={data.email}
                         onChange={(e) => setData("email", e.target.value)}
-
                     />
 
                     <InputError message={errors.email} className="mt-2" />
@@ -52,7 +51,7 @@ export default function Login({ status, canResetPassword }) {
                     <PasswordInput
                         label="Password"
                         variant="bordered"
-                         name="password"
+                        name="password"
                         value={data.password}
                         autoComplete="current-password"
                         onChange={(e) => setData("password", e.target.value)}
@@ -62,18 +61,16 @@ export default function Login({ status, canResetPassword }) {
                 </div>
 
                 <div className="mt-4 block">
-                    <label className="flex items-center">
+                    <div className="flex flex-col gap-2">
                         <Checkbox
-                            name="remember"
-                            checked={data.remember}
+                            isSelected={data.remember}
                             onChange={(e) =>
                                 setData("remember", e.target.checked)
                             }
-                        />
-                        <span className="ms-2 text-sm text-gray-600">
+                        >
                             Remember me
-                        </span>
-                    </label>
+                        </Checkbox>
+                    </div>
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">
@@ -85,10 +82,22 @@ export default function Login({ status, canResetPassword }) {
                             Forgot your password?
                         </Link>
                     )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
+                    <p className="text-md text-gray-600">
+                        Don't have an account?{" "}
+                        <Link
+                        href="http://one-pass.test/register"
+                        underline="hover"
+                        className="mr-4"
+                    >
+                    
+                    Register here
+                    </Link>
+                            
+                        
+                    </p>
+                    <Button type="submit" color="primary" variant="flat">
+                        LOG IN
+                    </Button>
                 </div>
             </form>
         </GuestLayout>
