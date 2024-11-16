@@ -33,10 +33,10 @@ Route::middleware(['auth', 'verified', 'password.confirm'])->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('sensitive-data.index');
             Route::get('/create', 'create')->name('sensitive-data.create');
-            Route::post('/', 'store')->name('sensitive-data.store');
+            Route::post('/', 'store')->middleware('encrypted')->name('sensitive-data.store');
             Route::get('/{id}', 'show')->whereUuid('id')->name('sensitive-data.show');
-            Route::get('/{id}/edit', 'edit')->whereUuid('id')->name('sensitive-data.edit');
-            Route::patch('/{id}', 'update')->whereUuid('id')->name('sensitive-data.update');
+            Route::get('/{id}/edit', 'edit')->whereUuid('id')->middleware('encrypted')->name('sensitive-data.edit');
+            Route::patch('/{id}', 'update')->whereUuid('id')->middleware('encrypted')->name('sensitive-data.update');
             Route::delete('/{id}', 'destroy')->whereUuid('id')->name('sensitive-data.destroy');
         });
 

@@ -14,6 +14,6 @@ trait HasMorphedUser
      */
     public function user(): MorphToMany
     {
-        return $this->morphedByMany(User::class, 'connectable', 'sensitive_data_connections');
+        return $this->morphToMany(User::class, 'connectable', 'sensitive_data_connections');
     }
 }

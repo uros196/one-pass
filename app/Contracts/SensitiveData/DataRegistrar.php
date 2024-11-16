@@ -13,9 +13,9 @@ interface DataRegistrar
      * Store sensitive data into DB.
      *
      * @param FormRequest $request
-     * @return void
+     * @return Model
      */
-    public function store(FormRequest $request): void;
+    public function store(FormRequest $request): Model;
 
     /**
      * Update existing sensitive data.

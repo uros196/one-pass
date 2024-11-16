@@ -27,7 +27,7 @@ interface HasSensitiveData
     /**
      * Define the data registrar.
      *
-     * @return string|array
+     * @return string
      */
-    public function dataRegistrar(): string|array;
+    public function dataRegistrar(): string;
 }
