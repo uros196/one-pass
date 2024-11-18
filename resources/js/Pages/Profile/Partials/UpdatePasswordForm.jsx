@@ -67,7 +67,7 @@ export default function UpdatePasswordForm({ className = "" }) {
                     />
 
                     <PasswordInput
-                        label="Password"
+                        label="Current Password"
                         variant="bordered"
                         name="password"
                         value={data.current_password}
@@ -84,7 +84,7 @@ export default function UpdatePasswordForm({ className = "" }) {
 
                 <div>
                     <PasswordInput
-                        label="Password"
+                        label="New Password"
                         variant="bordered"
                         name="password"
                         value={data.password}
@@ -96,7 +96,7 @@ export default function UpdatePasswordForm({ className = "" }) {
 
                 <div>
                     <PasswordInput
-                        label="Password"
+                        label="Confirm New Password "
                         variant="bordered"
                         name="password"
                         value={data.password_confirmation}

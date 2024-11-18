@@ -1,11 +1,11 @@
-
 import InputError from "@/Components/InputError";
 
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, useForm } from "@inertiajs/react";
 import PasswordInput from "@/Components/Form/PasswordInput";
-import { Input, Link, Checkbox, Button } from "@nextui-org/react";
-
+import { Input, Checkbox, Button } from "@nextui-org/react";
+import { Link as InertiaLink } from "@inertiajs/react";
+import { Link as NextUILink } from "@nextui-org/react";
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -75,25 +75,23 @@ export default function Login({ status, canResetPassword }) {
 
                 <div className="mt-4 flex items-center justify-end">
                     {canResetPassword && (
-                        <Link
+                        <InertiaLink
                             href={route("password.request")}
                             className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
                             Forgot your password?
-                        </Link>
+                        </InertiaLink>
                     )}
                     <p className="text-md text-gray-600">
                         Don't have an account?{" "}
-                        <Link
-                        href="http://one-pass.test/register"
-                        underline="hover"
-                        className="mr-4"
-                    >
-                    
-                    Register here
-                    </Link>
-                            
-                        
+                        <NextUILink
+                            as={InertiaLink}
+                            href="/register"
+                            underline="hover"
+                            className="mr-4"
+                        >
+                            Register here
+                        </NextUILink>
                     </p>
                     <Button type="submit" color="primary" variant="flat">
                         LOG IN

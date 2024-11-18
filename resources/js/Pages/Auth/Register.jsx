@@ -1,7 +1,9 @@
 import InputError from "@/Components/InputError";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, useForm } from "@inertiajs/react";
-import { Input, Link } from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
+import { Link as InertiaLink } from "@inertiajs/react";
+import { Link as NextUILink } from "@nextui-org/react";
 import PasswordInput from "@/Components/Form/PasswordInput";
 import { Button } from "@nextui-org/button";
 
@@ -27,7 +29,6 @@ export default function Register() {
 
             <form onSubmit={submit}>
                 <div>
-                    
                     <Input
                         key="inside"
                         type="name"
@@ -41,7 +42,6 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                   
                     <div>
                         <Input
                             key="inside"
@@ -58,7 +58,6 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                  
                     <PasswordInput
                         label="Password"
                         variant="bordered"
@@ -71,7 +70,6 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                  
                     <PasswordInput
                         label="Password"
                         variant="bordered"
@@ -89,14 +87,14 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">
-                   
-                    <Link
-                        href="http://one-pass.test/login"
+                    <NextUILink
+                        as={InertiaLink}
+                        href="/login"
                         underline="always"
                         className="mr-4"
                     >
                         Already registered?
-                    </Link>
+                    </NextUILink>
 
                     {/* <div className="mt-2 flex items-center justify-center"> */}
                     <Button type="submit" color="primary" variant="flat">
