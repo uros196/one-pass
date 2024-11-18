@@ -3,6 +3,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
+import SystemAlert from "@/Components/SystemAlert.jsx";
 
 export default function ForgotPassword({ status }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -25,11 +26,7 @@ export default function ForgotPassword({ status }) {
                 allow you to choose a new one.
             </div>
 
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
+            <SystemAlert />
 
             <form onSubmit={submit}>
                 <TextInput

@@ -1,6 +1,7 @@
 import PrimaryButton from '@/Components/PrimaryButton';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import SystemAlert from "@/Components/SystemAlert.jsx";
 
 export default function VerifyEmail({ status }) {
     const { post, processing } = useForm({});
@@ -22,12 +23,7 @@ export default function VerifyEmail({ status }) {
                 another.
             </div>
 
-            {status === 'verification-link-sent' && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    A new verification link has been sent to the email address
-                    you provided during registration.
-                </div>
-            )}
+            <SystemAlert />
 
             <form onSubmit={submit}>
                 <div className="mt-4 flex items-center justify-between">

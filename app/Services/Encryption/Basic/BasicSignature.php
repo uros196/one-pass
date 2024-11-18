@@ -31,7 +31,7 @@ class BasicSignature
     {
         if (!session()->has(self::SESSION_KEY)) {
             return request()->expectsJson()
-                ? response()->json(['message' => 'Password confirmation required.', 423])
+                ? response()->json(['message' => __('encryption.password_confirmation'), 423])
                 : redirect()->guest(route('password.confirm'));
         }
 

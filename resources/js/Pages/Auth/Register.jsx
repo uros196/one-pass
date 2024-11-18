@@ -4,6 +4,7 @@ import { Head, useForm } from "@inertiajs/react";
 import { Input, Link } from "@nextui-org/react";
 import PasswordInput from "@/Components/Form/PasswordInput";
 import { Button } from "@nextui-org/button";
+import SystemAlert from "@/Components/SystemAlert.jsx";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -25,9 +26,11 @@ export default function Register() {
         <GuestLayout>
             <Head title="Register" />
 
+            <SystemAlert />
+
             <form onSubmit={submit}>
                 <div>
-                    
+
                     <Input
                         key="inside"
                         type="name"
@@ -41,7 +44,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                   
+
                     <div>
                         <Input
                             key="inside"
@@ -58,7 +61,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                  
+
                     <PasswordInput
                         label="Password"
                         variant="bordered"
@@ -71,7 +74,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                  
+
                     <PasswordInput
                         label="Password"
                         variant="bordered"
@@ -89,7 +92,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">
-                   
+
                     <Link
                         href="http://one-pass.test/login"
                         underline="always"
