@@ -6,6 +6,7 @@ import { Link as InertiaLink } from "@inertiajs/react";
 import { Link as NextUILink } from "@nextui-org/react";
 import PasswordInput from "@/Components/Form/PasswordInput";
 import { Button } from "@nextui-org/button";
+import SystemAlert from "@/Components/SystemAlert.jsx";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -26,6 +27,8 @@ export default function Register() {
     return (
         <GuestLayout>
             <Head title="Register" />
+
+            <SystemAlert />
 
             <form onSubmit={submit}>
                 <div>

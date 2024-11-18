@@ -1,11 +1,12 @@
 import InputError from "@/Components/InputError";
-
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, useForm } from "@inertiajs/react";
 import PasswordInput from "@/Components/Form/PasswordInput";
 import { Input, Checkbox, Button } from "@nextui-org/react";
 import { Link as InertiaLink } from "@inertiajs/react";
 import { Link as NextUILink } from "@nextui-org/react";
+import { Input, Link, Checkbox, Button } from "@nextui-org/react";
+import SystemAlert from "@/Components/SystemAlert.jsx";
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -26,14 +27,10 @@ export default function Login({ status, canResetPassword }) {
         <GuestLayout>
             <Head title="Log in" />
 
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
+            <SystemAlert />
 
             <form onSubmit={submit}>
-                <div>
+            <div>
                     <Input
                         key="inside"
                         type="email"

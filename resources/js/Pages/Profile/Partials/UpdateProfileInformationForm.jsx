@@ -3,18 +3,19 @@ import InputError from "@/Components/InputError";
 import { Transition } from "@headlessui/react";
 import { Link, useForm, usePage } from "@inertiajs/react";
 import { Input, Button } from "@nextui-org/react";
+import SystemAlert from "@/Components/SystemAlert.jsx";
 
 export default function UpdateProfileInformation({
     mustVerifyEmail,
     status,
     className = "",
 }) {
-    const user = usePage().props.auth.user;
+    const { auth } = usePage().props;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } =
         useForm({
-            name: user.name,
-            email: user.email,
+            name: auth.user.name,
+            email: auth.user.email,
         });
 
     const submit = (e) => {
@@ -62,7 +63,7 @@ export default function UpdateProfileInformation({
                     <InputError className="mt-2" message={errors.email} />
                 </div>
 
-                {mustVerifyEmail && user.email_verified_at === null && (
+                {mustVerifyEmail && auth.user.email_verified_at === null && (
                     <div>
                         <p className="mt-2 text-sm text-gray-800">
                             Your email address is unverified.
@@ -76,12 +77,7 @@ export default function UpdateProfileInformation({
                             </Link>
                         </p>
 
-                        {status === "verification-link-sent" && (
-                            <div className="mt-2 text-sm font-medium text-green-600">
-                                A new verification link has been sent to your
-                                email address.
-                            </div>
-                        )}
+                        <SystemAlert />
                     </div>
                 )}
 

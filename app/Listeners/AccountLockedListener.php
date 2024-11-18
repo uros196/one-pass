@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Models\User;
+use App\Support\SystemAlert;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class AccountLockedListener
         $this->sendNotification($event->request);
 
         // this message will be displayed on the login page
-        $event->request->session()->put('status', __('auth.locked'));
+        SystemAlert::warning(__('auth.locked'))->toSession();
 
         // because we use this request in many scenarios, log out the user just in case
         Auth::logout();

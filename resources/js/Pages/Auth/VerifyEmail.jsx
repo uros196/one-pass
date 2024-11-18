@@ -4,6 +4,8 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import { Input, Button } from "@nextui-org/react";
 import { Link as InertiaLink } from '@inertiajs/react';
 import { Link as NextUILink } from '@nextui-org/react';
+import SystemAlert from "@/Components/SystemAlert.jsx";
+
 export default function VerifyEmail({ status }) {
     const { post, processing } = useForm({});
 
@@ -24,12 +26,7 @@ export default function VerifyEmail({ status }) {
                 another.
             </div>
 
-            {status === "verification-link-sent" && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    A new verification link has been sent to the email address
-                    you provided during registration.
-                </div>
-            )}
+            <SystemAlert />
 
             <form onSubmit={submit}>
                 <div className="mt-4 flex items-center justify-between">

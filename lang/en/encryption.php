@@ -9,4 +9,5 @@ return [
         'session_failed' => 'You not allowed to make request outside of current session.',
     ],
 
+    'password_confirmation' => 'Password confirmation required.'
 ];

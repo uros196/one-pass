@@ -6,6 +6,7 @@ import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 import PasswordInput from "@/Components/Form/PasswordInput";
 import { Button } from "@nextui-org/button";
+import SystemAlert from "@/Components/SystemAlert.jsx";
 
 export default function ConfirmPassword() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -23,6 +24,8 @@ export default function ConfirmPassword() {
     return (
         <GuestLayout>
             <Head title="Confirm Password" />
+
+            <SystemAlert />
 
             <div className="mb-4 text-sm text-gray-600">
                 This is a secure area of the application. Please confirm your
@@ -60,7 +63,7 @@ export default function ConfirmPassword() {
                     {/* <PrimaryButton className="ms-4" disabled={processing}>
                         Confirm
                     </PrimaryButton> */}
-                     <Button type="submit" color="primary" variant="flat">
+                     <Button type="submit" color="primary" variant="flat" isDisabled={processing}>
                         CONFIRM
                     </Button>
                 </div>
