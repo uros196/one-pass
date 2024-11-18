@@ -92,7 +92,7 @@ export default function Register() {
                 <div className="mt-4 flex items-center justify-end">
                     <NextUILink
                         as={InertiaLink}
-                        href="/login"
+                        href={route('login')}
                         underline="always"
                         className="mr-4"
                     >

@@ -1,7 +1,7 @@
 import PrimaryButton from "@/Components/PrimaryButton";
 import GuestLayout from "@/Layouts/GuestLayout";
-import { Head, Link, useForm } from "@inertiajs/react";
-import { Input, Button } from "@nextui-org/react";
+import { Head, useForm } from "@inertiajs/react";
+import { Button } from "@nextui-org/react";
 import { Link as InertiaLink } from '@inertiajs/react';
 import { Link as NextUILink } from '@nextui-org/react';
 import SystemAlert from "@/Components/SystemAlert.jsx";
@@ -30,7 +30,7 @@ export default function VerifyEmail({ status }) {
 
             <form onSubmit={submit}>
                 <div className="mt-4 flex items-center justify-between">
-                  
+
                     <Button
                         className="ms-4"
                         isDisabled={processing}
@@ -40,14 +40,14 @@ export default function VerifyEmail({ status }) {
                     >
                         Resend Verification Email
                     </Button>
-                   
+
                     <NextUILink
-                        as={InertiaLink} 
+                        as={InertiaLink}
                         href={route("logout")}
-                        method="post" 
+                        method="post"
                         underline="hover"
-                        className="mr-4"                        
-                        css={{ display: "inline-block" }} 
+                        className="mr-4"
+                        css={{ display: "inline-block" }}
                     >
                         Log Out
                     </NextUILink>

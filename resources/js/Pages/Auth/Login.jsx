@@ -5,7 +5,6 @@ import PasswordInput from "@/Components/Form/PasswordInput";
 import { Input, Checkbox, Button } from "@nextui-org/react";
 import { Link as InertiaLink } from "@inertiajs/react";
 import { Link as NextUILink } from "@nextui-org/react";
-import { Input, Link, Checkbox, Button } from "@nextui-org/react";
 import SystemAlert from "@/Components/SystemAlert.jsx";
 
 export default function Login({ status, canResetPassword }) {
@@ -83,7 +82,7 @@ export default function Login({ status, canResetPassword }) {
                         Don't have an account?{" "}
                         <NextUILink
                             as={InertiaLink}
-                            href="/register"
+                            href={route('register')}
                             underline="hover"
                             className="mr-4"
                         >
