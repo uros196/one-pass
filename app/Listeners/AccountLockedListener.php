@@ -21,7 +21,7 @@ class AccountLockedListener
         $this->sendNotification($event->request);
 
         // this message will be displayed on the login page
-        SystemAlert::info(__('auth.locked'))->toSession();
+        SystemAlert::warning(__('auth.locked'))->toSession();
 
         // because we use this request in many scenarios, log out the user just in case
         Auth::logout();
