@@ -72,6 +72,7 @@ export default function UpdatePasswordForm({ className = "" }) {
                         name="password"
                         value={data.current_password}
                         autoComplete="current-password"
+                        ref={currentPasswordInput}
                         onChange={(e) =>
                             setData("current_password", e.target.value)
                         }
@@ -89,6 +90,7 @@ export default function UpdatePasswordForm({ className = "" }) {
                         name="password"
                         value={data.password}
                         autoComplete="current-password"
+                        ref={passwordInput}
                         onChange={(e) => setData("password", e.target.value)}
                     />
                     <InputError message={errors.password} className="mt-2" />

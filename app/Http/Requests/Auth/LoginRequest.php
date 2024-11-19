@@ -98,7 +98,7 @@ class LoginRequest extends FormRequest
             // if the user reacts immediately, he can confirm the password without waiting
             RateLimiter::clear($this->throttleKey());
 
-            $this->failed(__('auth.locked'));
+            $this->throwValidationError(['account' => __('auth.locked')]);
         }
         // this is a case if email does not exist in our system
         else {
@@ -166,7 +166,7 @@ class LoginRequest extends FormRequest
      */
     protected function failed(string $message): void
     {
-        throw ValidationException::withMessages([
+        $this->throwValidationError([
             $this->validationFieldName() => $message,
         ]);
     }
@@ -179,5 +179,16 @@ class LoginRequest extends FormRequest
     protected function validationFieldName(): string
     {
         return 'email';
+    }
+
+    /**
+     * Throws validation exception.
+     *
+     * @param array $messages
+     * @return void
+     */
+    protected function throwValidationError(array $messages): void
+    {
+        throw ValidationException::withMessages($messages);
     }
 }

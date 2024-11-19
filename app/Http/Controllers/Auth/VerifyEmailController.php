@@ -40,7 +40,7 @@ class VerifyEmailController extends Controller
 
         $request->user()->sendEmailVerificationNotification();
 
-        return back()->with((array) SystemAlert::warning(__('message.verification_link_sent')));
+        return back()->with(SystemAlert::warning(__('message.verification_link_sent'))->toArray());
     }
 
     /**
