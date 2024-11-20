@@ -7,6 +7,8 @@ import { Head, useForm } from '@inertiajs/react';
 import PasswordInput from "@/Components/Form/PasswordInput";
 import { Button } from "@nextui-org/button";
 import SystemAlert from "@/Components/SystemAlert.jsx";
+import { Link as InertiaLink } from '@inertiajs/react';
+import { Link as NextUILink } from '@nextui-org/react';
 
 export default function ConfirmPassword() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -67,6 +69,16 @@ export default function ConfirmPassword() {
                      <Button type="submit" color="primary" variant="flat" isDisabled={processing}>
                         CONFIRM
                     </Button>
+                    <NextUILink
+                        as={InertiaLink}
+                        href={route("logout")}
+                        method="post"
+                        underline="hover"
+                        className="ml-4"
+                        css={{ display: "inline-block" }}
+                    >
+                        Log Out
+                    </NextUILink>
                 </div>
             </form>
         </GuestLayout>
