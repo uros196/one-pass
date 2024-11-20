@@ -39,6 +39,7 @@ export default function UnlockAccount({ hash }) {
                         value={data.password}
                         autoComplete="current-password"
                         onChange={(e) => setData("password", e.target.value)}
+                        autoFocus
                     />
                     <InputError message={errors.password} className="mt-2" />
                 </div>

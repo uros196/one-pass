@@ -46,6 +46,7 @@ export default function UpdateProfileInformation({
                         labelPlacement="inside"
                         value={data.name}
                         onChange={(e) => setData("name", e.target.value)}
+                          
                     />
                     <InputError className="mt-2" message={errors.name} />
                 </div>
