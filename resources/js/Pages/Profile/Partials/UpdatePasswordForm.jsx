@@ -75,6 +75,7 @@ export default function UpdatePasswordForm({ className = "" }) {
                         onChange={(e) =>
                             setData("current_password", e.target.value)
                         }
+                         
                     />
                     <InputError
                         message={errors.current_password}
