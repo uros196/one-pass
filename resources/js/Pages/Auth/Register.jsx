@@ -100,7 +100,7 @@ export default function Register() {
                     </NextUILink>
 
                     {/* <div className="mt-2 flex items-center justify-center"> */}
-                    <Button type="submit" color="primary" variant="flat">
+                    <Button type="submit" color="primary" variant="flat" isDisabled={processing}>
                         REGISTER
                     </Button>
                     {/* </div> */}

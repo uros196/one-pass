@@ -83,7 +83,7 @@ export default function UpdateProfileInformation({
                 )}
 
                 <div className="flex items-center gap-4">
-                    <Button type="submit" color="primary" variant="flat">
+                    <Button type="submit" color="primary" variant="flat" isDisabled={processing}>
                         SAVE
                     </Button>
                     <Transition

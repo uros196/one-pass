@@ -100,7 +100,7 @@ export default function DeleteUserForm({ className = "" }) {
                         >
                             Cancel
                         </Button>
-                        <Button type="submit" color="danger">
+                        <Button type="submit" color="danger" isDisabled={processing}>
                             Delete Account
                         </Button>
                     </div>
