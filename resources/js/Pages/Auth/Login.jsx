@@ -89,7 +89,7 @@ export default function Login({ status, canResetPassword }) {
                             Register here
                         </NextUILink>
                     </p>
-                    <Button type="submit" color="primary" variant="flat">
+                    <Button type="submit" color="primary" variant="flat" isDisabled={processing}>
                         LOG IN
                     </Button>
                 </div>
