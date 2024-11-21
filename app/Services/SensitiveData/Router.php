@@ -11,6 +11,7 @@ use App\Services\SensitiveData\Resolvers\ModelResolver;
 use App\Services\SensitiveData\Resolvers\RegistrarResolver;
 use App\Services\SensitiveData\Resolvers\ResourceResolver;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class Router
 {
@@ -29,6 +30,19 @@ class Router
     public static function getAvailableTypes(): array
     {
         return array_keys(config('sensitive_data.connections'));
+    }
+
+    /**
+     * Get the type name assigned to the model.
+     *
+     * @param string $model_name
+     * @return string|null
+     */
+    public static function getTypeByModel(string $model_name): ?string
+    {
+        return Arr::get(array_flip(array_map(function ($item) {
+            return $item['model'];
+        }, config('sensitive_data.connections'))), $model_name);
     }
 
     /**

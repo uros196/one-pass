@@ -3,7 +3,6 @@
 namespace App\Services\SensitiveData\Resolvers;
 
 use Illuminate\Http\Request;
-use Illuminate\Routing\Router;
 
 trait InteractWithRequest
 {
@@ -43,7 +42,7 @@ trait InteractWithRequest
      */
     protected function currentRouteAction(): string
     {
-        return Router::currentRouteAction();
+        return $this->request()->route()->getActionMethod();
     }
 
     /**
@@ -53,7 +52,7 @@ trait InteractWithRequest
      */
     protected function getType(): string
     {
-        return $this->request()->input('type');
+        return $this->request()->route()->parameter('type');
     }
 
     /**

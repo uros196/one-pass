@@ -40,7 +40,8 @@ class FormRequestResolver implements DataFormRequest
             ? $data[$this->currentRouteAction()]
             : $data;
 
-        return app()->make($form_request_class);
+        $this->resolvedRequest = app()->make($form_request_class);
+        return $this;
     }
 
     /**

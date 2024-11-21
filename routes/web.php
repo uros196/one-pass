@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\ActivityCheckController;
 use App\Http\Controllers\DesignStaticController;
+use App\Http\Controllers\Encryption\GenerateToken;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SensitiveDataController;
 use App\Services\SensitiveData\Router as DataRouter;
@@ -39,6 +40,8 @@ Route::middleware(['auth', 'verified', 'password.confirm'])->group(function () {
             Route::patch('/{id}', 'update')->whereUuid('id')->middleware('encrypted')->name('sensitive-data.update');
             Route::delete('/{id}', 'destroy')->whereUuid('id')->name('sensitive-data.destroy');
         });
+
+    Route::post('/generate-encryption-token', GenerateToken::class)->name('generate-encryption-token');
 
     // TEST METHODS (delete them after tests ends)
     Route::controller(\App\Http\Controllers\TestController::class)->group(function () {

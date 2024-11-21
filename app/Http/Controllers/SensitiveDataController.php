@@ -18,7 +18,7 @@ class SensitiveDataController extends Controller
     public function index(DataResource $resource): Response
     {
         return Inertia::render('SET-COMPONENT-NAME', [
-            'data' => $resource
+            'resource' => $resource->get()
         ]);
     }
 
@@ -40,6 +40,7 @@ class SensitiveDataController extends Controller
         });
 
         // TODO: return the response to the app
+        return back();
     }
 
     /**
@@ -50,7 +51,7 @@ class SensitiveDataController extends Controller
         // TODO: if is the simple data return (data shown in the modal), then remove Inertia response
 
         return Inertia::render('', [
-            'data' => $resource
+            'resource' => $resource->get()
         ]);
     }
 
@@ -62,7 +63,7 @@ class SensitiveDataController extends Controller
         // TODO: if is the simple data return (data shown in the modal), then remove Inertia response
 
         return Inertia::render('', [
-            'data' => $resource
+            'resource' => $resource->get()
         ]);
     }
 

@@ -41,7 +41,7 @@ class ChallengeSignatureRequest extends FormRequest
             'validate_all' => 'boolean',
 
             // required while generating encryption token
-            'password' => [
+            'master_password' => [
                 // this field will be excluded from the 'validate' and 'validated'
                 // if 'encryption_token' is present in the request and validate ALL is not requested
                 $this->excludeWith('encryption_token'),
@@ -52,8 +52,8 @@ class ChallengeSignatureRequest extends FormRequest
             // required while decrypting a Challenge Signature
             'encryption_token' => [
                 // this field will be excluded from the 'validate' and 'validated'
-                // if 'password' is present in the request and validate ALL is not requested
-                $this->excludeWith('password'),
+                // if 'master_password' is present in the request and validate ALL is not requested
+                $this->excludeWith('master_password'),
                 'required',
                 new VerifyChallengeEncryptionTokenRule($this)
             ],
