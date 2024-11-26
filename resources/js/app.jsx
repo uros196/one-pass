@@ -4,7 +4,8 @@ import './bootstrap';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
-import {NextUIProvider} from "@nextui-org/react";
+import { NextUIProvider } from "@nextui-org/react";
+import { EncryptedDataProvider } from "@/Components/Encryption/TokenProvider.jsx";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -20,7 +21,9 @@ createInertiaApp({
 
         root.render(
             <NextUIProvider>
-                <App {...props} />
+                <EncryptedDataProvider>
+                    <App {...props} />
+                </EncryptedDataProvider>
             </NextUIProvider>
         );
     },
