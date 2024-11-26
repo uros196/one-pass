@@ -5,40 +5,29 @@ namespace App\Models\Contracts;
 interface HasSensitiveData
 {
     /**
-     * Check if sensitive attributes is defined.
+     * Define the list (or single) of the JsonResources.
      *
-     * @return bool
+     * Available array keys: index, show, edit.
+     * If you use an array, all keys must be present.
+     *
+     * @return string|array
      */
-    public function hasSensitiveAttributes(): bool;
+    public function dataResource(): string|array;
 
     /**
-     * Check if attribute is defined as sensitive or not.
+     * Define the list (or single) of the FormRequests.
      *
-     * @param string $key
-     * @return bool
+     * Available array keys: store and update.
+     * If you use an array, all keys must be present.
+     *
+     * @return string|array
      */
-    public function isAttributeSensitive(string $key): bool;
+    public function dataFormRequest(): string|array;
 
     /**
-     * Get defined sensitive attributes.
+     * Define the data registrar.
      *
-     * @return array
-     */
-    public function getSensitiveAttributes(): array;
-
-    /**
-     * Encrypt sensitive data.
-     *
-     * @param mixed $data
      * @return string
      */
-    public function encrypt(#[\SensitiveParameter] mixed $data): string;
-
-    /**
-     * Decrypt sensitive data.
-     *
-     * @param string $data
-     * @return mixed
-     */
-    public function decrypt(string $data): mixed;
+    public function dataRegistrar(): string;
 }

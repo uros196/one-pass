@@ -25,6 +25,10 @@ class ChallengeEncryption implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
+        if (is_null($value)) {
+            return null;
+        }
+
         return $this->encrypter()->canDecrypt($value)
             ? $this->encrypter()->decrypt($value)
             : '••••••••••••••••••';
@@ -38,10 +42,15 @@ class ChallengeEncryption implements CastsAttributes
      * @param TSet|null $value
      * @param array<string, mixed> $attributes
      *
-     * @return string
+     * @return mixed
      */
-    public function set(Model $model, string $key, mixed $value, array $attributes): string
+    public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
+        if (is_null($value)) {
+            return null;
+        }
+
+        // TODO: maybe return 'encryption_token' validation error
         if (!ChallengeSignature::exists()) {
             throw new \InvalidArgumentException('Encryption Error! Challenge Signature is missing.');
         }

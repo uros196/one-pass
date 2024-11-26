@@ -15,7 +15,7 @@ trait SensitiveDataConnections
      */
     public function loginData(): MorphToMany
     {
-        return $this->morphToMany(LoginData::class, 'connectable', 'sensitive_data_connections');
+        return $this->morphedByMany(LoginData::class, 'connectable', 'sensitive_data_connections');
     }
 
     /**
@@ -25,6 +25,6 @@ trait SensitiveDataConnections
      */
     public function noteData(): MorphToMany
     {
-        return $this->morphToMany(NoteData::class, 'connectable', 'sensitive_data_connections');
+        return $this->morphedByMany(NoteData::class, 'connectable', 'sensitive_data_connections');
     }
 }

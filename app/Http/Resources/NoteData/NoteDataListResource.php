@@ -3,6 +3,7 @@
 namespace App\Http\Resources\NoteData;
 
 use App\Models\NoteData;
+use App\Services\SensitiveData\Router;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -21,7 +22,7 @@ class NoteDataListResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => NoteData::class,
+            'type' => Router::getTypeByModel(NoteData::class),
             'name' => $this->name,
             'color' => [
                 'background_color' => $this->color->backgroundColor(),

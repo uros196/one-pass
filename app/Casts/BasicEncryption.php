@@ -24,7 +24,9 @@ class BasicEncryption implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        return $this->encrypter()->decrypt($value);
+        return !is_null($value)
+            ? $this->encrypter()->decrypt($value)
+            : null;
     }
 
     /**
@@ -35,11 +37,13 @@ class BasicEncryption implements CastsAttributes
      * @param TSet|null $value
      * @param array<string, mixed> $attributes
      *
-     * @return string
+     * @return mixed
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        return $this->encrypter()->encrypt($value);
+        return !is_null($value)
+            ? $this->encrypter()->encrypt($value)
+            : null;
     }
 
     /**

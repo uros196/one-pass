@@ -3,6 +3,7 @@
 namespace App\Http\Resources\LoginData;
 
 use App\Models\LoginData;
+use App\Services\SensitiveData\Router;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -21,7 +22,7 @@ class LoginDataListResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => LoginData::class,
+            'type' => Router::getTypeByModel(LoginData::class),
             'name' => $this->name,
             'username' => $this->username,
             'url' => $this->url,
