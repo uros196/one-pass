@@ -10,68 +10,97 @@ export const useEncrypted = () => {
     return useContext(EncryptedDataContext);
 };
 
+/**
+ * This provider allows us to manage encrypted data more easily.
+ * It offers a solution for verifying the Master Password when accessing sensitive data
+ * (when such data is being read or saved).
+ *
+ * Flow:
+ *  - User submits 'create' form, for example (without the valid token)
+ *  - Confirmation Master Password modal appears
+ *  - After successful confirmation, modal is closing, and the previous request is submitting again
+ *    automatically (now, with the valid token)
+ *
+ * @param children
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const EncryptedDataProvider = ({children}) => {
+    // short-life token that will be used for encrypting/decrypting data that uses Challenge Encryption method
+    // as long as this token is valid, the user will not be asked to confirm their Master Password again
     const [token, setToken] = useState('token');
-    const [promptMasterPassword, setPromptMasterPassword] = useState(false);
-    const [confirmedPassword, setConfirmedPassword] = useState(false);
+
+    // state that controls modal for Master Password confirmation
+    const [isPromptedMasterPassword, promptMasterPassword] = useState(false);
+
+    // holds the callback for re-submission after token failure
     const [submitAgain, setSubmitAgain] = useState({});
 
-    const encryptedData = (method, url, options = {}) => {
-        method(url, {
-            ...options,
+    // this method defines everything you need for successful request submission
+    // it defines the necessary header (with the token) and error handler if the token is invalid
+    // 'callback' represent whatever you need to do (ajax call, form submission, ...)
+    // you only need to integrate the headers and onError into your callback for it to function properly
+    const encryptedData = (callback) => {
+        callback({
             headers: {
                 'X-ENCRYPT-TOKEN': token
             },
             onError: (error) => {
+                // check for validation error (invalid token)
                 if (error.encryption_token) {
+                    // save callback for the re-submission after user confirms its Master Password
                     setSubmitAgain({
-                        method: method,
-                        url: url,
-                        options: options
+                        callback: callback
                     });
 
-                    setConfirmedPassword(false);
-                    setPromptMasterPassword(true);
+                    // require opening the Master Password confirmation modal
+                    promptMasterPassword(true);
                 }
-            },
+            }
         });
     };
 
-    const confirmedMasterPassword = (token) => {
-        setToken(token);
-        setConfirmedPassword(true);
-    }
-
+    // watch token changes and re-submit previous request
     useEffect(() => {
-        if (confirmedPassword) {
-            encryptedData(submitAgain.method, submitAgain.url, submitAgain.options);
+        if (token !== 'token') {
+            encryptedData(submitAgain.callback);
             setSubmitAgain({});
         }
-    }, [confirmedPassword]);
+    }, [token]);
 
     return (
-        <EncryptedDataContext.Provider value={{ promptMasterPassword, setPromptMasterPassword, encryptedData, confirmedMasterPassword }}>
+        <EncryptedDataContext.Provider value={{ setToken, isPromptedMasterPassword, promptMasterPassword, encryptedData }}>
             {children}
             <ConfirmPasswordModal />
         </EncryptedDataContext.Provider>
     );
 };
 
+/**
+ * Confirmation modal that will appear when a user is requested to confirm its Master Password.
+ * Modal will be opened automatically when the token is invalid.
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const ConfirmPasswordModal = () => {
     const passwordInput = useRef();
     const form = useForm({master_password: ''});
 
+    // handle NextUI modal events
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-    const { confirmedMasterPassword, promptMasterPassword, setPromptMasterPassword } = useEncrypted();
+    // use EncryptedDataContext to handle the token and the modal
+    const { setToken, isPromptedMasterPassword, promptMasterPassword } = useEncrypted();
 
     // open modal if prompted master password is requested
     useEffect(() => {
-        if (promptMasterPassword) {
+        if (isPromptedMasterPassword) {
             onOpen();
         }
-    }, [promptMasterPassword]);
+    }, [isPromptedMasterPassword]);
 
+    // request from the server to generate the token
     const getEncryptionToken = (e) => {
         e.preventDefault();
 
@@ -79,7 +108,7 @@ const ConfirmPasswordModal = () => {
             preserveState: true,
             preserveScroll: true,
             onSuccess: (page) => {
-                confirmedMasterPassword(page.props.flash.token);
+                setToken(page.props.flash.token);
                 closeModal();
             },
             onError: () => {
@@ -93,7 +122,7 @@ const ConfirmPasswordModal = () => {
         form.reset('master_password');
         form.clearErrors();
         onClose();
-        setPromptMasterPassword(false);
+        promptMasterPassword(false);
     };
 
     return (
