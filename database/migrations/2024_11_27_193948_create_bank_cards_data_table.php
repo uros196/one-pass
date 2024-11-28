@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('logins_data', function (Blueprint $table) {
+        Schema::create('bank_cards_data', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->comment('alias: title');
-            $table->string('username')->nullable();
-            $table->string('password')->nullable();
-            $table->string('url')->nullable()->comment('website url');
+            $table->string('number');
+            $table->integer('identifier');
+            $table->string('expire_date')->nullable();
+            $table->string('cvc')->nullable();
+            $table->string('pin')->nullable();
+            $table->string('holder_name')->nullable();
+            $table->string('type')->default('none');
             $table->text('note')->nullable();
             $table->timestamps();
         });
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('logins_data');
+        Schema::dropIfExists('bank_cards_data');
     }
 };

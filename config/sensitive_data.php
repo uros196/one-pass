@@ -14,6 +14,10 @@ return [
 
         'note' => [
             'model' => \App\Models\NoteData::class,
-        ]
+        ],
+
+        'bank-card' => [
+            'model' => \App\Models\BankCardData::class,
+        ],
     ]
 ];

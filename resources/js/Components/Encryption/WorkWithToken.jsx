@@ -2,7 +2,7 @@ import {createContext, useContext, useEffect, useRef, useState} from "react";
 import {Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@nextui-org/react";
 import {useForm} from "@inertiajs/react";
 import PasswordInput from "@/Components/Form/PasswordInput.jsx";
-import InputError from "@/Components/InputError.jsx";
+import useFormConstruct from "@/Components/Form/FormConstruct.jsx";
 
 const EncryptedDataContext = createContext();
 
@@ -87,6 +87,9 @@ const ConfirmPasswordModal = () => {
     const passwordInput = useRef();
     const form = useForm({master_password: ''});
 
+    // use form construct for easier initialization common parts of the password input
+    const { error, value } = useFormConstruct(form);
+
     // handle NextUI modal events
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
@@ -136,15 +139,14 @@ const ConfirmPasswordModal = () => {
                         <ModalBody>
                             <form onSubmit={getEncryptionToken} id="get-token">
                                 <PasswordInput
-                                    autoFocus
+                                    {...value('master_password')}
+                                    {...error('master_password')}
                                     variant="bordered"
                                     label="Password"
                                     placeholder="Enter your master password"
-                                    value={form.data.master_password}
-                                    onChange={(e) => form.setData("master_password", e.target.value)}
                                     ref={passwordInput}
+                                    autoFocus
                                 />
-                                <InputError message={form.errors.master_password} className="mt-2" />
                             </form>
                         </ModalBody>
                         <ModalFooter>

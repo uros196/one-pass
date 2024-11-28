@@ -17,7 +17,7 @@ class NoteDataRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'text' => 'nullable|string|max:255',
+            'text' => 'nullable|string|max:1000',
             'color' => ['nullable', 'integer', Rule::enum(CardColors::class)]
         ];
     }

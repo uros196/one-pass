@@ -18,7 +18,7 @@ class LoginDataRequest extends FormRequest
             'username' => 'nullable|string|max:255',
             'password' => 'nullable|string|max:255',
             'url' => 'nullable|url|max:255',
-            'note' => 'nullable|string|max:255',
+            'note' => 'nullable|string|max:500',
         ];
     }
 
