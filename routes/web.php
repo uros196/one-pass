@@ -43,17 +43,6 @@ Route::middleware(['auth', 'verified', 'password.confirm'])->group(function () {
 
     Route::post('/generate-encryption-token', GenerateToken::class)->name('generate-encryption-token');
 
-    // TEST METHODS (delete them after tests ends)
-    Route::controller(\App\Http\Controllers\TestController::class)->group(function () {
-        Route::get('/create-encrypt-token', 'encryptTokenForm')->name('show-encrypt-token-form');
-        Route::post('/create-encrypt-token', 'createEncryptToken')->name('create-token');
-
-        Route::get('/encrypt/{token?}', 'showEncrypt')->name('show-encrypt');
-        Route::post('/encrypt', 'encryptData')->middleware('encrypted')->name('encrypt');
-        Route::get('/decrypt/{token?}/{encrypted?}', 'showDecrypt')->name('show-decrypt');
-        // remove 'encrypted' middleware if you want to see how non-decrypted data will be displayed
-        Route::post('/decrypt', 'decryptData')->middleware('encrypted')->name('decrypt');
-    });
 });
 
 Route::get('/activity/check', ActivityCheckController::class)->name('activity.check');
