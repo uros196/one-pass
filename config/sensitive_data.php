@@ -24,6 +24,10 @@ return [
             'model' => \App\Models\IdCardDocument::class,
         ],
 
+        'passport' => [
+            'model' => \App\Models\PassportDocument::class,
+        ],
+
         'driver-license' => [
             'model' => \App\Models\DriverLicenseDocument::class,
         ],

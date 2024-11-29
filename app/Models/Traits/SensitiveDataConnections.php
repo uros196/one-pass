@@ -7,6 +7,7 @@ use App\Models\DriverLicenseDocument;
 use App\Models\IdCardDocument;
 use App\Models\LoginData;
 use App\Models\NoteData;
+use App\Models\PassportDocument;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait SensitiveDataConnections
@@ -51,6 +52,15 @@ trait SensitiveDataConnections
         return $this->morphedByMany(IdCardDocument::class, 'connectable', 'sensitive_data_connections');
     }
 
+    /**
+     * Get related Passport data associated with the User.
+     *
+     * @return MorphToMany
+     */
+    public function passportData(): MorphToMany
+    {
+        return $this->morphedByMany(PassportDocument::class, 'connectable', 'sensitive_data_connections');
+    }
 
     /**
      * Get related Driver License data associated with the User.
