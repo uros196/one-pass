@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name')->comment('alias: title');
             $table->string('number');
+            $table->integer('number_length');
             $table->integer('identifier');
             $table->string('expire_date')->nullable();
             $table->string('cvc')->nullable();

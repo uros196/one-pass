@@ -34,6 +34,7 @@ class BankCardData extends Model implements HasSensitiveData
     protected $fillable = [
         'name',
         'number',
+        'number_length',
         'identifier',
         'expire_date',
         'cvc',
@@ -62,14 +63,20 @@ class BankCardData extends Model implements HasSensitiveData
     }
 
     /**
-     * Get the card hidden number
+     * Get the card hidden number.
      *
      * @return Attribute
      */
     public function cardHiddenNumber(): Attribute
     {
         return Attribute::get(function () {
-            return "•••• •••• •••• $this->identifier";
+            $identifier_length = strlen((string)$this->identifier);
+            $hidden = str_repeat('•', ($this->number_length - $identifier_length));
+
+            // try to match a card number format with card type
+            return $this->type->config()?->format("{$hidden}{$this->identifier}")
+                // if type is NONE, use a default format
+                ?? "•••• •••• •••• $this->identifier";
         });
     }
 

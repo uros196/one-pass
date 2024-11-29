@@ -23,8 +23,9 @@ class BankCardDataRegistrar implements DataRegistrar
     {
         $bankCard = BankCardData::create([
             ...$request->validated(),
-            'type'       => $this->getCardType($request),
-            'identifier' => $this->getIdentifier($request),
+            'type'          => $this->getCardType($request),
+            'number_length' => $this->getCardNumberLength($request),
+            'identifier'    => $this->getIdentifier($request),
         ]);
         auth()->user()->bankCardData()->attach($bankCard);
 
@@ -43,8 +44,9 @@ class BankCardDataRegistrar implements DataRegistrar
     {
         $model->update([
             ...$request->validated(),
-            'type'       => $this->getCardType($request),
-            'identifier' => $this->getIdentifier($request),
+            'type'          => $this->getCardType($request),
+            'number_length' => $this->getCardNumberLength($request),
+            'identifier'    => $this->getIdentifier($request),
         ]);
     }
 
@@ -69,6 +71,17 @@ class BankCardDataRegistrar implements DataRegistrar
         $type = CreditCardValidator::getType($request->validated('number'));
 
         return BankCardTypes::tryFrom($type->getType()) ?? BankCardTypes::NONE;
+    }
+
+    /**
+     * Get the card number length so we can later properly display the hidden card number.
+     *
+     * @param FormRequest $request
+     * @return int
+     */
+    protected function getCardNumberLength(FormRequest $request): int
+    {
+        return strlen((string)$request->validated('number'));
     }
 
     /**
