@@ -46,6 +46,17 @@ class Router
     }
 
     /**
+     * Get the all available config that is related to the requested $type.
+     *
+     * @param string $type
+     * @return array
+     */
+    public static function getConfigByType(string $type): array
+    {
+        return Arr::get(config("sensitive_data.connections"), $type, []);
+    }
+
+    /**
      * Resolve data FormRequest.
      *
      * @return DataFormRequest

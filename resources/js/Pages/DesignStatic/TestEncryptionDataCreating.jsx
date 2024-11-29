@@ -78,7 +78,7 @@ const BankCard = () => {
         holder_name: '',
         note: ''
     })
-    const { post, reset, data, setData, errors, processing, isDirty } = form;
+    const { post, reset, data, setData, processing, isDirty } = form;
 
     const { error, initInput } = useFormConstruct(form);
 
@@ -154,6 +154,63 @@ const BankCard = () => {
     );
 }
 
+const Document = ({type}) => {
+    const { encryptedData } = useEncrypted();
+
+    const form = useForm({
+        name: '',
+        number: '',
+        issue_date: '',
+        expire_date: '',
+        place_of_issue: ''
+    })
+    const { post, reset, processing, isDirty } = form;
+
+    const { initInput } = useFormConstruct(form);
+
+    const saveDocument = (e) => {
+        e.preventDefault();
+
+        encryptedData((options) => {
+            post(route('sensitive-data.store', {type: type}), {
+                preserveScroll: true,
+                onSuccess: () => reset(),
+                ...options
+            })
+        });
+    }
+
+    return (
+        <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+            <section className="space-y-6">
+                <header>
+                    <h2 className="text-lg font-medium text-gray-900">
+                        {type} document
+                    </h2>
+
+                    <p className="mt-1 text-sm text-gray-600">
+                        Testing creating a new {type} document
+                    </p>
+                </header>
+
+                <form onSubmit={saveDocument} className="mt-6 space-y-6">
+                    <Input {...initInput('name')} label="Name" />
+                    <Input {...initInput('number')} label="Number" />
+                    <DatePicker /*{...initInput('issue_date')}*/ label="Issue date" showMonthAndYearPickers />
+                    <DatePicker /*{...initInput('expire_date')}*/ label="Expire date" showMonthAndYearPickers />
+                    <Input {...initInput('place_of_issue')} label="Place of issue" />
+
+                    {isDirty && (
+                        <Button type="submit" color="primary" isDisabled={processing}>
+                            Save
+                        </Button>
+                    )}
+                </form>
+            </section>
+        </div>
+    );
+}
+
 export default function TestEncryptionDataCreating() {
     return (
         <AuthenticatedLayout
@@ -167,6 +224,7 @@ export default function TestEncryptionDataCreating() {
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <LoginData />
                     <BankCard />
+                    <Document type="id-card" />
                 </div>
             </div>
         </AuthenticatedLayout>

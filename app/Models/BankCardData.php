@@ -4,16 +4,17 @@ namespace App\Models;
 
 use App\Casts\BasicEncryption;
 use App\Casts\ChallengeEncryption;
+use App\Contracts\Models\HasSensitiveData;
 use App\DataRegistrars\BankCardDataRegistrar;
 use App\Enums\BankCardTypes;
 use App\Http\Requests\SensitiveData\BankCardDataRequest;
 use App\Http\Resources\BankCardData\BankCardDataListResource;
 use App\Http\Resources\BankCardData\BankCardDataResource;
 use App\Models\Concerns\HasMorphedUser;
-use App\Models\Contracts\HasSensitiveData;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class BankCardData extends Model implements HasSensitiveData
 {
@@ -52,13 +53,13 @@ class BankCardData extends Model implements HasSensitiveData
     protected function casts(): array
     {
         return [
-            'number' => ChallengeEncryption::class,
-            'expire_date' => 'date:Y-m',
-            'cvc' => ChallengeEncryption::class,
-            'pin' => ChallengeEncryption::class,
-            'holder_name' => BasicEncryption::class,
-            'type' => BankCardTypes::class,
-            'note' => ChallengeEncryption::class
+            'number'        => ChallengeEncryption::class,
+            'cvc'           => ChallengeEncryption::class,
+            'pin'           => ChallengeEncryption::class,
+            'note'          => ChallengeEncryption::class,
+            'expire_date'   => BasicEncryption::class,
+            'holder_name'   => BasicEncryption::class,
+            'type'          => BankCardTypes::class,
         ];
     }
 
@@ -73,10 +74,22 @@ class BankCardData extends Model implements HasSensitiveData
             $identifier_length = strlen((string)$this->identifier);
             $hidden = str_repeat('•', ($this->number_length - $identifier_length));
 
-            // try to match a card number format with card type
+            // try to match a card number format with a card type
             return $this->type->config()?->format("{$hidden}{$this->identifier}")
                 // if type is NONE, use a default format
                 ?? "•••• •••• •••• $this->identifier";
+        });
+    }
+
+    /**
+     * Get date converted into an object.
+     *
+     * @return Attribute
+     */
+    protected function expireDate(): Attribute
+    {
+        return Attribute::get(function ($value) {
+            return !is_null($value) ? Carbon::parse($value)->format('Y-m') : null;
         });
     }
 

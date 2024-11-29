@@ -2,10 +2,10 @@
 
 namespace App\Services\SensitiveData\Resolvers;
 
+use App\Contracts\Models\HasSensitiveData;
 use App\Contracts\SensitiveData\DataModel;
 use App\Contracts\SensitiveData\DataRegistrar;
 use App\Contracts\SensitiveData\DataResource;
-use App\Models\Contracts\HasSensitiveData;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ResourceResolver implements DataResource

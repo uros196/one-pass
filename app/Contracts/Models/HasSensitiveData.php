@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Contracts;
+namespace App\Contracts\Models;
 
 interface HasSensitiveData
 {

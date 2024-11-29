@@ -19,5 +19,9 @@ return [
         'bank-card' => [
             'model' => \App\Models\BankCardData::class,
         ],
+
+        'id-card' => [
+            'model' => \App\Models\IdCardDocument::class,
+        ],
     ]
 ];

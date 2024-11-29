@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Casts\ChallengeEncryption;
+use App\Contracts\Models\HasSensitiveData;
 use App\DataRegistrars\NoteDataRegistrar;
 use App\Enums\CardColors;
 use App\Http\Requests\SensitiveData\NoteDataRequest;
 use App\Http\Resources\NoteData\NoteDataListResource;
 use App\Http\Resources\NoteData\NoteDataResource;
 use App\Models\Concerns\HasMorphedUser;
-use App\Models\Contracts\HasSensitiveData;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 

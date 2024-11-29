@@ -4,12 +4,12 @@ namespace App\Models;
 
 use App\Casts\BasicEncryption;
 use App\Casts\ChallengeEncryption;
+use App\Contracts\Models\HasSensitiveData;
 use App\DataRegistrars\LoginDataRegistrar;
 use App\Http\Requests\SensitiveData\LoginDataRequest;
 use App\Http\Resources\LoginData\LoginDataListResource;
 use App\Http\Resources\LoginData\LoginDataResource;
 use App\Models\Concerns\HasMorphedUser;
-use App\Models\Contracts\HasSensitiveData;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
