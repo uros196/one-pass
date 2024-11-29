@@ -225,6 +225,7 @@ export default function TestEncryptionDataCreating() {
                     <LoginData />
                     <BankCard />
                     <Document type="id-card" />
+                    <Document type="driver-license" />
                 </div>
             </div>
         </AuthenticatedLayout>

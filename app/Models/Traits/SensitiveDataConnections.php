@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Models\BankCardData;
+use App\Models\DriverLicenseDocument;
 use App\Models\IdCardDocument;
 use App\Models\LoginData;
 use App\Models\NoteData;
@@ -50,4 +51,14 @@ trait SensitiveDataConnections
         return $this->morphedByMany(IdCardDocument::class, 'connectable', 'sensitive_data_connections');
     }
 
+
+    /**
+     * Get related Driver License data associated with the User.
+     *
+     * @return MorphToMany
+     */
+    public function driverLicenseData(): MorphToMany
+    {
+        return $this->morphedByMany(DriverLicenseDocument::class, 'connectable', 'sensitive_data_connections');
+    }
 }

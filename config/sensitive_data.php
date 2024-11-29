@@ -23,5 +23,9 @@ return [
         'id-card' => [
             'model' => \App\Models\IdCardDocument::class,
         ],
+
+        'driver-license' => [
+            'model' => \App\Models\DriverLicenseDocument::class,
+        ],
     ]
 ];
