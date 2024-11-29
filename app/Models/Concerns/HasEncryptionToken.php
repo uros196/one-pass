@@ -34,6 +34,9 @@ trait HasEncryptionToken
      */
     public function createToken(ChallengeSignatureRequest $request): string
     {
+        // delete existing token (if any) every time when new token is requested
+        $this->encryptionToken?->delete();
+
         $token = $this->generateTokenString();
 
         $model = $this->encryptionToken()->create([

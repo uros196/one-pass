@@ -96,7 +96,7 @@ class ChallengeSignature
     public function encrypt(): string
     {
         return $this->encrypter()->encrypt(
-            self::make($this->request->validated('password'), $this->request->user())
+            self::make($this->request->validated('master_password'), $this->request->user())
         );
     }
 

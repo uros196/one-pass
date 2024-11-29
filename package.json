@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "@nextui-org/react": "^2.4.8",
-        "react-hot-keys": "^2.7.3"
+        "react-hot-keys": "^2.7.3",
+        "react-input-mask": "^2.0.4"
     }
 }
