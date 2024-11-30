@@ -32,6 +32,8 @@ class TokenFactory
     /**
      * Extend token life.
      *
+     * @deprecated Token now has a fixed lifetime span
+     *
      * @param EncryptionToken $model
      * @return void
      */
@@ -40,6 +42,19 @@ class TokenFactory
         $model->forceFill([
             'last_used_at' => now(),
             'expires_at'   => now()->addMinutes(config('auth.encryption_token.expire')),
+        ])->save();
+    }
+
+    /**
+     * Update the last time when token is used.
+     *
+     * @param EncryptionToken $model
+     * @return void
+     */
+    public static function lastUsed(EncryptionToken $model): void
+    {
+        $model->forceFill([
+            'last_used_at' => now()
         ])->save();
     }
 

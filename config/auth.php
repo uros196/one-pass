@@ -119,8 +119,8 @@ return [
     'unlock_link_expire' => 10,
 
     'encryption_token' => [
-        // token life after last using expressed in minutes
-        'expire' => 3
+        // token life expressed in minutes
+        'expire' => 5
     ],
 
     'verification' => [

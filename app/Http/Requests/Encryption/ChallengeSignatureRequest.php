@@ -96,7 +96,7 @@ class ChallengeSignatureRequest extends FormRequest
     {
         // if token pass the validation, extend its life
         if ($this->validated('encryption_token', false)) {
-            TokenFactory::extendTokenLife($this->user()->encryptionToken);
+            TokenFactory::lastUsed($this->user()->encryptionToken);
         }
     }
 
