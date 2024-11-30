@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('documents_data', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('type');
-            $table->string('name')->nullable()->comment('alias: title');
+            $table->string('name')->comment('alias: title');
             $table->string('number')->nullable();
             $table->string('issue_date')->nullable();
             $table->string('expire_date')->nullable();

@@ -2,7 +2,7 @@
 
 namespace App\DataRegistrars;
 
-use App\Contracts\SensitiveData\DataRegistrar;
+use App\Contracts\SensitiveData\Resolvers\DataRegistrar;
 use App\Models\NoteData;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;

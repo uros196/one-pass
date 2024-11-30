@@ -2,7 +2,7 @@
 
 namespace App\Services\SensitiveData\Resolvers;
 
-use App\Contracts\SensitiveData\DataModel;
+use App\Contracts\SensitiveData\Resolvers\DataModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 

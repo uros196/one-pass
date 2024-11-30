@@ -4,16 +4,28 @@ namespace App\Models\Concerns;
 
 use App\Casts\BasicEncryption;
 use App\Casts\ChallengeEncryption;
+use App\Configs\ExpirableData\DocumentProvider;
+use App\Contracts\SensitiveData\ExpirableNotificationContract;
 use App\DataRegistrars\DocumentDataRegistrar;
 use App\Enums\DocumentTypes;
 use App\Http\Requests\SensitiveData\DocumentDataRequest;
 use App\Http\Resources\DocumentData\DocumentDataListResource;
 use App\Http\Resources\DocumentData\DocumentDataResource;
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Support\Carbon;
 
+/**
+ * @property string $id
+ * @property DocumentTypes $types
+ * @property string $name
+ * @property string $number
+ * @property string $place_of_issue
+ * @property DateTime $created_at
+ * @property DateTime $updated_at
+ */
 trait HasDocumentData
 {
     use HasUuids, HasMorphedUser;
@@ -76,7 +88,7 @@ trait HasDocumentData
     protected function issueDate(): Attribute
     {
         return Attribute::get(function ($value) {
-            return !is_null($value) ? Carbon::parse($value)->format('d/m/Y') : null;
+            return !is_null($value) ? Carbon::parse($value) : null;
         });
     }
 
@@ -88,8 +100,31 @@ trait HasDocumentData
     protected function expireDate(): Attribute
     {
         return Attribute::get(function ($value) {
-            return !is_null($value) ? Carbon::parse($value)->format('d/m/Y') : null;
+            return !is_null($value) ? Carbon::parse($value) : null;
         });
+    }
+
+    /**
+     * Define the date when the data expires.
+     * This date is important for informing an owner about a document expiring when the time comes.
+     *
+     * @return DateTime|string|null
+     */
+    public function dataExpiresAt(): DateTime|string|null
+    {
+        return $this->expire_date;
+    }
+
+    /**
+     * Define an object that will provide the data for expiration notification.
+     * Keep in mind that the data must be visible (unencrypted).
+     *
+     * @return ExpirableNotificationContract
+     * @throws \Exception
+     */
+    public function expireNotificationDataProvider(): ExpirableNotificationContract
+    {
+        return new DocumentProvider($this);
     }
 
     /**

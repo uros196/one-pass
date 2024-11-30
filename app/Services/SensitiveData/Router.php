@@ -2,10 +2,10 @@
 
 namespace App\Services\SensitiveData;
 
-use App\Contracts\SensitiveData\DataFormRequest;
-use App\Contracts\SensitiveData\DataModel;
-use App\Contracts\SensitiveData\DataRegistrar;
-use App\Contracts\SensitiveData\DataResource;
+use App\Contracts\SensitiveData\Resolvers\DataFormRequest;
+use App\Contracts\SensitiveData\Resolvers\DataModel;
+use App\Contracts\SensitiveData\Resolvers\DataRegistrar;
+use App\Contracts\SensitiveData\Resolvers\DataResource;
 use App\Services\SensitiveData\Resolvers\FormRequestResolver;
 use App\Services\SensitiveData\Resolvers\ModelResolver;
 use App\Services\SensitiveData\Resolvers\RegistrarResolver;
@@ -35,11 +35,15 @@ class Router
     /**
      * Get the type name assigned to the model.
      *
-     * @param string $model_name
+     * @param object|string $model_name
      * @return string|null
      */
-    public static function getTypeByModel(string $model_name): ?string
+    public static function getTypeByModel(object|string $model_name): ?string
     {
+        if (is_object($model_name)) {
+            $model_name = get_class($model_name);
+        }
+
         return Arr::get(array_flip(array_map(function ($item) {
             return $item['model'];
         }, config('sensitive_data.connections'))), $model_name);

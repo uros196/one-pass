@@ -8,6 +8,7 @@ use App\Models\IdCardDocument;
 use App\Models\LoginData;
 use App\Models\NoteData;
 use App\Models\PassportDocument;
+use App\Models\SensitiveDataConnection;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait SensitiveDataConnections
@@ -19,7 +20,8 @@ trait SensitiveDataConnections
      */
     public function loginData(): MorphToMany
     {
-        return $this->morphedByMany(LoginData::class, 'connectable', 'sensitive_data_connections');
+        return $this->morphedByMany(LoginData::class, 'connectable', 'sensitive_data_connections')
+            ->using(SensitiveDataConnection::class);
     }
 
     /**
@@ -29,7 +31,8 @@ trait SensitiveDataConnections
      */
     public function noteData(): MorphToMany
     {
-        return $this->morphedByMany(NoteData::class, 'connectable', 'sensitive_data_connections');
+        return $this->morphedByMany(NoteData::class, 'connectable', 'sensitive_data_connections')
+            ->using(SensitiveDataConnection::class);
     }
 
     /**
@@ -39,7 +42,8 @@ trait SensitiveDataConnections
      */
     public function bankCardData(): MorphToMany
     {
-        return $this->morphedByMany(BankCardData::class, 'connectable', 'sensitive_data_connections');
+        return $this->morphedByMany(BankCardData::class, 'connectable', 'sensitive_data_connections')
+            ->using(SensitiveDataConnection::class);
     }
 
     /**
@@ -49,7 +53,8 @@ trait SensitiveDataConnections
      */
     public function idCardData(): MorphToMany
     {
-        return $this->morphedByMany(IdCardDocument::class, 'connectable', 'sensitive_data_connections');
+        return $this->morphedByMany(IdCardDocument::class, 'connectable', 'sensitive_data_connections')
+            ->using(SensitiveDataConnection::class);
     }
 
     /**
@@ -59,7 +64,8 @@ trait SensitiveDataConnections
      */
     public function passportData(): MorphToMany
     {
-        return $this->morphedByMany(PassportDocument::class, 'connectable', 'sensitive_data_connections');
+        return $this->morphedByMany(PassportDocument::class, 'connectable', 'sensitive_data_connections')
+            ->using(SensitiveDataConnection::class);
     }
 
     /**
@@ -69,6 +75,7 @@ trait SensitiveDataConnections
      */
     public function driverLicenseData(): MorphToMany
     {
-        return $this->morphedByMany(DriverLicenseDocument::class, 'connectable', 'sensitive_data_connections');
+        return $this->morphedByMany(DriverLicenseDocument::class, 'connectable', 'sensitive_data_connections')
+            ->using(SensitiveDataConnection::class);
     }
 }

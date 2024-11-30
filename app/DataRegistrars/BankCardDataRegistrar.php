@@ -2,7 +2,7 @@
 
 namespace App\DataRegistrars;
 
-use App\Contracts\SensitiveData\DataRegistrar;
+use App\Contracts\SensitiveData\Resolvers\DataRegistrar;
 use App\Enums\BankCardTypes;
 use App\Models\BankCardData;
 use Illuminate\Database\Eloquent\Model;
@@ -57,7 +57,9 @@ class BankCardDataRegistrar implements DataRegistrar
      */
     public function list(): Collection|LengthAwarePaginator
     {
-        return auth()->user()->bankCardData;
+        return auth()->user()->bankCardData
+            // load relation that handles expiration date
+            ->load('dataConnection.dataExpirationDate');
     }
 
     /**

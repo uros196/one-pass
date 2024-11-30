@@ -23,7 +23,7 @@ class BankCardDataResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'number' => $this->number,
-            'expire_date' => $this->expire_date,
+            'expire_date' => $this->expire_date?->format('Y-m'),
             'cvc' => $this->cvc,
             'pin' => $this->pin,
             'holder_name' => $this->holder_name,

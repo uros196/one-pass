@@ -25,8 +25,9 @@ class BankCardDataListResource extends JsonResource
             'type' => Router::getTypeByModel(BankCardData::class),
             'name' => $this->name,
             'number' => $this->card_hidden_number,
-            'expire_date' => $this->expire_date,
+            'expire_date' => $this->expire_date?->format('m/y'),
             'holder_name' => $this->holder_name,
+            'is_expiring_soon' => $this->dataConnection->dataExpirationDate->is_expiring_soon
 
             // TODO: card type and card image based on the type
         ];
