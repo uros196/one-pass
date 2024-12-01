@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\SensitiveData\DataFormRequest;
-use App\Contracts\SensitiveData\DataModel;
-use App\Contracts\SensitiveData\DataRegistrar;
-use App\Contracts\SensitiveData\DataResource;
+use App\Contracts\SensitiveData\Resolvers\DataFormRequest;
+use App\Contracts\SensitiveData\Resolvers\DataModel;
+use App\Contracts\SensitiveData\Resolvers\DataRegistrar;
+use App\Contracts\SensitiveData\Resolvers\DataResource;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;

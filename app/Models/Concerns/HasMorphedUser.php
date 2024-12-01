@@ -20,11 +20,11 @@ trait HasMorphedUser
     }
 
     /**
-     * Make the relation to the 'connections' table.
+     * Make the relation to the 'connections' table (where all connections are stored).
      *
      * @return MorphOne
      */
-    public function connection(): MorphOne
+    public function dataConnection(): MorphOne
     {
         return $this->morphOne(SensitiveDataConnection::class, 'connectable');
     }

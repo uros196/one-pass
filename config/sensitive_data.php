@@ -31,5 +31,9 @@ return [
         'driver-license' => [
             'model' => \App\Models\DriverLicenseDocument::class,
         ],
-    ]
+    ],
+
+    // notify the use if its data is about to expire soon
+    // the value is expressed in days
+    'expire_soon' => 30
 ];

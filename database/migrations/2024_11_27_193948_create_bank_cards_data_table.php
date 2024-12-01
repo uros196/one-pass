@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('bank_cards_data', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->comment('alias: title');
-            $table->string('number');
+            $table->text('number');
+            $table->string('type')->default('none');
             $table->integer('number_length');
             $table->integer('identifier');
-            $table->string('expire_date')->nullable();
-            $table->string('cvc')->nullable();
-            $table->string('pin')->nullable();
-            $table->string('holder_name')->nullable();
-            $table->string('type')->default('none');
+            $table->text('expire_date')->nullable();
+            $table->text('cvc')->nullable();
+            $table->text('pin')->nullable();
+            $table->text('holder_name')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
         });

@@ -4,19 +4,28 @@ namespace App\Models;
 
 use App\Casts\BasicEncryption;
 use App\Casts\ChallengeEncryption;
+use App\Configs\ExpirableData\BankCardProvider;
 use App\Contracts\Models\HasSensitiveData;
+use App\Contracts\SensitiveData\ExpirableDataContract;
+use App\Contracts\SensitiveData\ExpirableNotificationContract;
 use App\DataRegistrars\BankCardDataRegistrar;
 use App\Enums\BankCardTypes;
 use App\Http\Requests\SensitiveData\BankCardDataRequest;
 use App\Http\Resources\BankCardData\BankCardDataListResource;
 use App\Http\Resources\BankCardData\BankCardDataResource;
 use App\Models\Concerns\HasMorphedUser;
+use App\Observers\ExpirableDataObserver;
+use DateTime;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 
-class BankCardData extends Model implements HasSensitiveData
+/**
+ * @property DateTime|null $expire_date
+ */
+#[ObservedBy(ExpirableDataObserver::class)]
+class BankCardData extends Model implements HasSensitiveData, ExpirableDataContract
 {
     use HasUuids, HasMorphedUser;
 
@@ -57,7 +66,7 @@ class BankCardData extends Model implements HasSensitiveData
             'cvc'           => ChallengeEncryption::class,
             'pin'           => ChallengeEncryption::class,
             'note'          => ChallengeEncryption::class,
-            'expire_date'   => BasicEncryption::class,
+            'expire_date'   => BasicEncryption::after('date:m/y'),
             'holder_name'   => BasicEncryption::class,
             'type'          => BankCardTypes::class,
         ];
@@ -82,15 +91,27 @@ class BankCardData extends Model implements HasSensitiveData
     }
 
     /**
-     * Get date converted into an object.
+     * Define the date when the data expires.
+     * This date is important for informing an owner about a document expiring when the time comes.
      *
-     * @return Attribute
+     * @return DateTime|string|null
      */
-    protected function expireDate(): Attribute
+    public function dataExpiresAt(): DateTime|string|null
     {
-        return Attribute::get(function ($value) {
-            return !is_null($value) ? Carbon::parse($value)->format('Y-m') : null;
-        });
+        // because we remember only the month and year of the expiration date,
+        // we need to modify such a date by adding the last date of the current month
+        return $this->expire_date?->endOfMonth();
+    }
+
+    /**
+     * Define an object that will provide the data for expiration notification.
+     * Keep in mind that the data must be visible (unencrypted).
+     *
+     * @return ExpirableNotificationContract
+     */
+    public function expireNotificationDataProvider(): ExpirableNotificationContract
+    {
+        return new BankCardProvider($this);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contracts\SensitiveData;
+namespace App\Contracts\SensitiveData\Resolvers;
 
 use Illuminate\Database\Eloquent\Model;
 

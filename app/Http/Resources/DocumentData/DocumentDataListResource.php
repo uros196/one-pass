@@ -24,6 +24,7 @@ class DocumentDataListResource extends JsonResource
             'id' => $this->id,
             'type' => Router::getTypeByModel(get_class($this->resource)),
             'name' => $this->name,
+            'is_expiring_soon' => $this->dataConnection->dataExpirationDate->is_expiring_soon
         ];
     }
 }

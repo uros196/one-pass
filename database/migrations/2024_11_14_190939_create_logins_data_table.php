@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('logins_data', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->comment('alias: title');
-            $table->string('username')->nullable();
-            $table->string('password')->nullable();
-            $table->string('url')->nullable()->comment('website url');
+            $table->text('username')->nullable();
+            $table->text('password')->nullable();
+            $table->text('url')->nullable()->comment('website url');
             $table->text('note')->nullable();
             $table->timestamps();
         });

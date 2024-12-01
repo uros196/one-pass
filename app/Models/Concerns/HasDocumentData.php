@@ -4,16 +4,26 @@ namespace App\Models\Concerns;
 
 use App\Casts\BasicEncryption;
 use App\Casts\ChallengeEncryption;
+use App\Configs\ExpirableData\DocumentProvider;
+use App\Contracts\SensitiveData\ExpirableNotificationContract;
 use App\DataRegistrars\DocumentDataRegistrar;
 use App\Enums\DocumentTypes;
 use App\Http\Requests\SensitiveData\DocumentDataRequest;
 use App\Http\Resources\DocumentData\DocumentDataListResource;
 use App\Http\Resources\DocumentData\DocumentDataResource;
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Support\Carbon;
 
+/**
+ * @property string $id
+ * @property DocumentTypes $types
+ * @property string $name
+ * @property string $number
+ * @property string $place_of_issue
+ * @property DateTime $created_at
+ * @property DateTime $updated_at
+ */
 trait HasDocumentData
 {
     use HasUuids, HasMorphedUser;
@@ -62,34 +72,33 @@ trait HasDocumentData
         return [
             'type' => DocumentTypes::class,
             'number' => ChallengeEncryption::class,
-            'issue_date' => BasicEncryption::class,
-            'expire_date' => BasicEncryption::class,
+            'issue_date' => BasicEncryption::after('date:d/m/Y'),
+            'expire_date' => BasicEncryption::after('date:d/m/Y'),
             'place_of_issue' => BasicEncryption::class
         ];
     }
 
     /**
-     * Get date converted into an object.
+     * Define the date when the data expires.
+     * This date is important for informing an owner about a document expiring when the time comes.
      *
-     * @return Attribute
+     * @return DateTime|string|null
      */
-    protected function issueDate(): Attribute
+    public function dataExpiresAt(): DateTime|string|null
     {
-        return Attribute::get(function ($value) {
-            return !is_null($value) ? Carbon::parse($value)->format('d/m/Y') : null;
-        });
+        return $this->expire_date;
     }
 
     /**
-     * Get date converted into an object.
+     * Define an object that will provide the data for expiration notification.
+     * Keep in mind that the data must be visible (unencrypted).
      *
-     * @return Attribute
+     * @return ExpirableNotificationContract
+     * @throws \Exception
      */
-    protected function expireDate(): Attribute
+    public function expireNotificationDataProvider(): ExpirableNotificationContract
     {
-        return Attribute::get(function ($value) {
-            return !is_null($value) ? Carbon::parse($value)->format('d/m/Y') : null;
-        });
+        return new DocumentProvider($this);
     }
 
     /**

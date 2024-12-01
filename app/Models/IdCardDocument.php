@@ -4,11 +4,15 @@ namespace App\Models;
 
 use App\Contracts\Models\DocumentDataContract;
 use App\Contracts\Models\HasSensitiveData;
+use App\Contracts\SensitiveData\ExpirableDataContract;
 use App\Enums\DocumentTypes;
 use App\Models\Concerns\HasDocumentData;
+use App\Observers\ExpirableDataObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 
-class IdCardDocument extends Model implements HasSensitiveData, DocumentDataContract
+#[ObservedBy(ExpirableDataObserver::class)]
+class IdCardDocument extends Model implements HasSensitiveData, DocumentDataContract, ExpirableDataContract
 {
     use HasDocumentData;
 

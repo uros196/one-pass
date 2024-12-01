@@ -3,7 +3,7 @@
 namespace App\Services\SensitiveData\Resolvers;
 
 use App\Contracts\Models\HasSensitiveData;
-use App\Contracts\SensitiveData\DataFormRequest;
+use App\Contracts\SensitiveData\Resolvers\DataFormRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Http\FormRequest;
 

@@ -3,9 +3,11 @@
 namespace App\DataRegistrars;
 
 use App\Contracts\Models\DocumentDataContract;
-use App\Contracts\SensitiveData\DataRegistrar;
+use App\Contracts\SensitiveData\Resolvers\DataRegistrar;
+use App\Models\SensitiveDataConnection;
 use App\Services\SensitiveData\Resolvers\InteractWithRequest;
 use App\Services\SensitiveData\Router;
+use App\Services\SensitiveData\Schedulers\IsAboutToExpire;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -56,7 +58,9 @@ class DocumentDataRegistrar implements DataRegistrar
      */
     public function list(): Collection|LengthAwarePaginator
     {
-        return auth()->user()->{$this->getDocModel()->relationName()};
+        return auth()->user()->{$this->getDocModel()->relationName()}
+            // load relation that handles expiration date
+            ->load('dataConnection.dataExpirationDate');
     }
 
     /**
