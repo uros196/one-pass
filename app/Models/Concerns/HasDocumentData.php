@@ -13,9 +13,7 @@ use App\Http\Resources\DocumentData\DocumentDataListResource;
 use App\Http\Resources\DocumentData\DocumentDataResource;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Support\Carbon;
 
 /**
  * @property string $id
@@ -74,34 +72,10 @@ trait HasDocumentData
         return [
             'type' => DocumentTypes::class,
             'number' => ChallengeEncryption::class,
-            'issue_date' => BasicEncryption::class,
-            'expire_date' => BasicEncryption::class,
+            'issue_date' => BasicEncryption::after('date:d/m/Y'),
+            'expire_date' => BasicEncryption::after('date:d/m/Y'),
             'place_of_issue' => BasicEncryption::class
         ];
-    }
-
-    /**
-     * Get date converted into an object.
-     *
-     * @return Attribute
-     */
-    protected function issueDate(): Attribute
-    {
-        return Attribute::get(function ($value) {
-            return !is_null($value) ? Carbon::parse($value) : null;
-        });
-    }
-
-    /**
-     * Get date converted into an object.
-     *
-     * @return Attribute
-     */
-    protected function expireDate(): Attribute
-    {
-        return Attribute::get(function ($value) {
-            return !is_null($value) ? Carbon::parse($value) : null;
-        });
     }
 
     /**

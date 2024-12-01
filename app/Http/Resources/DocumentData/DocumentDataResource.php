@@ -23,8 +23,8 @@ class DocumentDataResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'number' => $this->number,
-            'issue_date' => $this->issue_date?->format('d/m/Y'),
-            'expire_date' => $this->expire_date?->format('d/m/Y'),
+            'issue_date' => $this->issue_date,
+            'expire_date' => $this->expire_date,
             'place_of_issue' => $this->place_of_issue
         ];
     }

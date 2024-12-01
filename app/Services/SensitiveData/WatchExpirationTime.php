@@ -30,9 +30,7 @@ class WatchExpirationTime
             $date = Carbon::parse($date);
         }
 
-        $model->dataConnection->dataExpirationDate()->updateOrCreate([
-            'sensitive_data_connection_id' => $model->dataConnection->id,
-        ], [
+        $model->dataConnection->dataExpirationDate()->updateOrCreate([], [
             'expires_at' => $date,
         ]);
     }

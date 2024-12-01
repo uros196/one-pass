@@ -41,11 +41,11 @@ class DataExpireSoonNotification extends Notification
         // TODO: improve this notification to looks nice
 
         $provider = $this->model->expireNotificationDataProvider();
-        $days = now()->diffInDays($this->expirationDate());
+        $days = (int) ceil(now()->diffInDays($this->expirationDate()));
 
         return (new MailMessage)
             ->subject('Document expiration notification')
-            ->line("You document is about to expire for $days days.")
+            ->line("You document '". $provider->name() ."' is about to expire for $days days.")
             ->action('See the document', $provider->link());
     }
 

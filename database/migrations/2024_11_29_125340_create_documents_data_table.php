@@ -15,10 +15,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('type');
             $table->string('name')->comment('alias: title');
-            $table->string('number')->nullable();
-            $table->string('issue_date')->nullable();
-            $table->string('expire_date')->nullable();
-            $table->string('place_of_issue')->nullable();
+            $table->text('number')->nullable();
+            $table->text('issue_date')->nullable();
+            $table->text('expire_date')->nullable();
+            $table->text('place_of_issue')->nullable();
             $table->timestamps();
         });
     }

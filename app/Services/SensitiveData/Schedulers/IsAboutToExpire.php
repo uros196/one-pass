@@ -18,10 +18,10 @@ class IsAboutToExpire
     {
         $this->expiresSoon()->each(function (DataExpirationTime $item) {
             $item->sensitiveDataConnection->user->notify(
-                new DataExpireSoonNotification($item->sensitiveDataConnection->data)
+                new DataExpireSoonNotification($item->sensitiveDataConnection->connectable)
             );
 
-            $item->update(['is_notified' => true]);
+            $item->forceFill(['is_notified' => true])->update();
         });
     }
 
@@ -33,7 +33,7 @@ class IsAboutToExpire
     protected function expiresSoon(): Collection
     {
         return DataExpirationTime::with('sensitiveDataConnection.user')
-            ->with('sensitiveDataConnection.data')
+            ->with('sensitiveDataConnection.connectable')
             ->where('is_notified', false)
             ->whereBetween('expires_at', [
                 now(),

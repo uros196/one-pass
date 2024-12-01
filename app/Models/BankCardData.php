@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 
 /**
  * @property DateTime|null $expire_date
@@ -67,7 +66,7 @@ class BankCardData extends Model implements HasSensitiveData, ExpirableDataContr
             'cvc'           => ChallengeEncryption::class,
             'pin'           => ChallengeEncryption::class,
             'note'          => ChallengeEncryption::class,
-            'expire_date'   => BasicEncryption::class,
+            'expire_date'   => BasicEncryption::after('date:m/y'),
             'holder_name'   => BasicEncryption::class,
             'type'          => BankCardTypes::class,
         ];
@@ -88,18 +87,6 @@ class BankCardData extends Model implements HasSensitiveData, ExpirableDataContr
             return $this->type->config()?->format("{$hidden}{$this->identifier}")
                 // if type is NONE, use a default format
                 ?? "•••• •••• •••• $this->identifier";
-        });
-    }
-
-    /**
-     * Get date converted into an object.
-     *
-     * @return Attribute
-     */
-    protected function expireDate(): Attribute
-    {
-        return Attribute::get(function ($value) {
-            return !is_null($value) ? Carbon::parse($value) : null;
         });
     }
 
