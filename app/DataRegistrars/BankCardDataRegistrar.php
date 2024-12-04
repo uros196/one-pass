@@ -72,7 +72,7 @@ class BankCardDataRegistrar implements DataRegistrar
     {
         $type = CreditCardValidator::getType($request->validated('number'));
 
-        return BankCardTypes::tryFrom($type->getType()) ?? BankCardTypes::NONE;
+        return BankCardTypes::tryFrom($type?->getType() ?? BankCardTypes::NONE->value);
     }
 
     /**
